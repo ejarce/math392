@@ -1,0 +1,209 @@
+---
+title: "Problem Set 1"
+author: "EJ Arce"
+date: "1/23/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(resampledata)
+data(FlightDelays)
+library(tidyverse)
+```
+
+#### 1.1a
+
+Population: high school students
+
+Sample: 2000 high school students
+
+Statistic: 47%
+
+#### 1.1b
+
+Population: US residents
+
+Parameter: 13.9% of US residents are aged between 15 and 24 years
+
+#### 1.1c
+
+Population: NBA players
+
+Parameter: average height (78.93 inches)
+
+#### 1.1d
+
+Population: US adults
+
+Sample: A Gallop poll of 1,025 adults
+
+Statistic: 47%
+
+#### 1.3a
+
+Experiment
+
+#### 1.3b
+
+Yes, because the study is an experiment
+
+#### 1.3c
+
+Yes, with a large sample, where volunteers were randomly assigned, the conclusions can be genaralized to the population of interest.
+
+#### 1.5a
+
+.00001
+
+#### 1.5b
+
+$$1- (1 - .00001)^{2000} = 1 - .9802 = .0198$$
+
+#### 1.5c
+
+$$.5 = 1 - (1 - .00001)^{x}$$
+
+$$.5 = .99999^{x}$$
+
+$$x = log_{.99999}(.5)$$
+
+$$x = 69314.371482$$
+
+For a probability of at least .5, 69315 samples must be collected.
+
+#### 2.4a
+
+```{r}
+bar <- ggplot(FlightDelays, aes(DepartTime)) + geom_bar()
+bar
+
+table(FlightDelays$DepartTime)
+```
+
+
+#### 2.4b
+
+```{r}
+table(FlightDelays$Day,FlightDelays$Delayed30)
+```
+
+Sunday: .0799
+
+Monday: .0968
+
+Tuesday: .1481
+
+Wednesday: .1348
+
+Thursday: .2332
+
+Friday: .2261
+
+Saturday: .1038
+
+#### 2.8a
+
+Solve for a:
+
+##### First quartile
+
+$$\int_0^{a} \lambda e^{-\lambda x} ~dx = .25$$
+$$-e^{-\lambda x} \rvert_{0}^{a} = .25$$
+$$1 - e^{-\lambda a} = .25$$
+$$e^{-\lambda a} = .75$$
+$$-\lambda a = ln(.75)$$
+$$a = \frac{ln(.75)}{\lambda}$$
+
+##### Median
+
+$$\int_0^{a} \lambda e^{-\lambda x} ~dx = .5$$
+$$-e^{-\lambda x} \rvert_{0}^{a} = .5$$
+$$1 - e^{-\lambda a} = .5$$
+$$e^{-\lambda a} = .5$$
+$$-\lambda a = ln(.5)$$
+$$a = \frac{ln(.5)}{\lambda}$$
+
+##### Third quartile
+
+$$\int_0^{a} \lambda e^{-\lambda x} dx = .75$$
+$$-e^{-\lambda x} \rvert_{0}^{a} = .75$$
+$$1 - e^{-\lambda a} = .75$$
+$$e^{-\lambda a} = .25$$
+$$-\lambda a = ln(.25)$$
+$$a = \frac{ln(.25)}{\lambda}$$
+
+#### 2.8b
+
+Solve for b:
+
+##### First quartile
+
+$$F(x) = \int_{1}^{b} \frac{\alpha}{x^{\alpha + 1}} dx = .25$$
+$$\int_{1}^{b} x^{-\alpha - 1} dx = .25$$
+$$x^{-\alpha}\rvert_{0}^{b} = .25$$
+$$b^{\alpha} = .25$$
+$$b = \sqrt[a]{.25}$$
+
+##### Median
+
+$$F(x) = \int_{1}^{b} \frac{\alpha}{x^{\alpha + 1}} dx = .5$$
+$$\int_{1}^{b} x^{-\alpha - 1} dx = .5$$
+$$x^{-\alpha}\rvert_{0}^{b} = .5$$
+$$b^{\alpha} = .5$$
+$$b = \sqrt[a]{.5}$$
+
+##### Third quartile
+
+$$F(x) = \int_{1}^{b} \frac{\alpha}{x^{\alpha + 1}} dx = .75$$
+$$\int_{1}^{b} x^{-\alpha - 1} dx = .75$$
+$$x^{-\alpha}\rvert_{0}^{b} = .75$$
+$$b^{\alpha} = .75$$
+$$b = \sqrt[a]{.75}$$
+
+#### 2.9
+
+$$p = 1 − \frac{9}{x^2}$$
+
+#### 2.10
+
+No, the binomial distribution is discrete (only supported on nonnegative integers), so there is no integer q such that F(q) = .05. When q = 2, F(q) = .0278, and when q = 3, F(q) = .0716.
+
+#### 2.11
+
+##### 1
+
+The density plot of the simulated data is shown below, with red line indicating the theoretical density plot of the gamma distribution.
+
+```{r}
+set.seed(30)
+d <- rgamma(20,2,2)
+d <- data.frame(x=d)
+ggplot(d, aes(x=x)) +
+  geom_density() +
+  stat_function(fun=dgamma,args=list(2,2), colour = "red") +
+  ggtitle("Comparing theoretical and simulated density plots")
+```
+
+```{r}
+set.seed(30)
+ggplot(d) +
+  geom_qq(aes(sample = rgamma(20,2,2))) +
+  ggtitle("QQ plot of theoretical vs simulated data")
+```
+
+##### 2
+
+```{r}
+set.seed(23)
+ggplot() +
+  geom_qq(aes(sample = rnorm(20,0,1))) +
+  ggtitle("QQ plot of theoretical vs simulated data drawn from a standard
+          normal distribution")
+
+ggplot() +
+  geom_qq(aes(sample = rt(20,1))) +
+  ggtitle("QQ plot of theoretical vs simulated data drawn from a t distribution
+          with one degree of freedom")
+```
+
