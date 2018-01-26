@@ -108,7 +108,7 @@ Solve for a:
 
 ##### First quartile
 
-$$\int_0^{a} \lambda e^{-\lambda x} ~dx = .25$$
+$$F(x) = \int_0^{a} \lambda e^{-\lambda x} ~dx = .25$$
 $$-e^{-\lambda x} \rvert_{0}^{a} = .25$$
 $$1 - e^{-\lambda a} = .25$$
 $$e^{-\lambda a} = .75$$
@@ -117,7 +117,7 @@ $$a = \frac{ln(.75)}{\lambda}$$
 
 ##### Median
 
-$$\int_0^{a} \lambda e^{-\lambda x} ~dx = .5$$
+$$F(x) = \int_0^{a} \lambda e^{-\lambda x} ~dx = .5$$
 $$-e^{-\lambda x} \rvert_{0}^{a} = .5$$
 $$1 - e^{-\lambda a} = .5$$
 $$e^{-\lambda a} = .5$$
@@ -126,7 +126,7 @@ $$a = \frac{ln(.5)}{\lambda}$$
 
 ##### Third quartile
 
-$$\int_0^{a} \lambda e^{-\lambda x} dx = .75$$
+$$F(x) = \int_0^{a} \lambda e^{-\lambda x} dx = .75$$
 $$-e^{-\lambda x} \rvert_{0}^{a} = .75$$
 $$1 - e^{-\lambda a} = .75$$
 $$e^{-\lambda a} = .25$$
@@ -163,7 +163,12 @@ $$b = \sqrt[a]{.75}$$
 
 #### 2.9
 
+Solve for x:
+
 $$p = 1 − \frac{9}{x^2}$$
+$$\frac{9}{x^2} = 1 - p$$
+$$\frac{9}{1-p} = x^{2}$$
+$$x = \sqrt{\frac{9}{1-p}}$$
 
 #### 2.10
 
@@ -187,7 +192,7 @@ ggplot(d, aes(x=x)) +
 
 ```{r}
 set.seed(30)
-ggplot(d) +
+ggplot() +
   geom_qq(aes(sample = rgamma(20,2,2))) +
   ggtitle("QQ plot of theoretical vs simulated data")
 ```
@@ -198,12 +203,10 @@ ggplot(d) +
 set.seed(23)
 ggplot() +
   geom_qq(aes(sample = rnorm(20,0,1))) +
-  ggtitle("QQ plot of theoretical vs simulated data drawn from a standard
-          normal distribution")
+  ggtitle("QQ plot of theoretical vs simulated data drawn from a standard normal distribution")
 
 ggplot() +
   geom_qq(aes(sample = rt(20,1))) +
-  ggtitle("QQ plot of theoretical vs simulated data drawn from a t distribution
-          with one degree of freedom")
+  ggtitle("QQ plot of theoretical vs simulated data drawn from a t distribution with one degree of freedom")
 ```
 
