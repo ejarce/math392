@@ -1,0 +1,44 @@
+---
+title: "Activity 1"
+author: "EJ Arce"
+date: "1/29/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+```
+
+```{r}
+grades <- read.csv("http://bit.ly/2Fry1lV")
+grades <- grades %>%
+  group_by(even)
+```
+
+```{r}
+obs <- median(grades$final[grades$even=="even"]) - median(grades$final[grades$even=="odd"])
+index <- rep(NA, 5000)
+differences <- rep(NA,5000)
+for(i in 1:5000){
+  index[i] <- sample(30, 19, replace=F)
+  differences[i] <- mean(grades$final[index[i]]) - mean(grades$final[-index[i]])
+}
+df <- data.frame(x=differences)
+ggplot(df, aes(x=x)) +
+  geom_density()+
+  geom_vline(xintercept=obs,col="red")
+```
+
+### Andrew's way
+
+```{r}
+it <- 5000
+stats <- rep(NA,it)
+for(i in 1:it){
+  perm <- sample(grades$even, replace=F)
+  stats[i] <- mean(grades$final[perm=="even"]-mean(grades$final[perm=="odd"]))
+}
+mean(stats)
+```
+
