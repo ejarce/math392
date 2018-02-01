@@ -108,10 +108,23 @@ table(GSS2002$Gender,GSS2002$Pres00)
 ### b
 
 ```{r}
-chisq.test(GSS2002$Gender,GSS2002$Pres00, simulate.p.value = T)
+gender <- GSS2002$Gender
+pres <- GSS2002$Pres00
+chisq.test(gender,pres)
 ```
 
 ### c
+
+```{r}
+# Remove NAs
+GSS2002 <- GSS2002 %>%
+  filter(!is.na(Gender),
+         !is.na(Pres00))
+# Chi-squared test using permutations
+nsim <- 10000
+
+```
+
 
 ## 3.22
 
@@ -147,3 +160,7 @@ $$
 Pr(P(T) \geq p) = Pr(T(X) \geq t) = p.
 $$
 This shows that P(T) follows a uniform distribution, where Pr(p) = 1/n.
+
+## 3.32
+
+
