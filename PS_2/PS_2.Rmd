@@ -20,6 +20,14 @@ set.seed(30) # set seed for reproducibility
 ## 3.4
 
 ### a
+We are testing to see if the distributions of the proportion of flights delayed by more than 20 minutes, $\theta$, differs by airline:
+$$
+H_0: \theta_{UA} - \theta_{AA} = 0
+$$
+  
+$$
+H_A: \theta_{UA} - \theta_{AA} = 0
+$$
 
 ```{r}
 FlightDelays <- FlightDelays %>%
@@ -43,7 +51,7 @@ simdf <- data.frame(means)
 ggplot(simdf, aes(x = means)) +
   geom_density() +
   geom_vline(xintercept = xobs, col = "red") +
-  ggtitle("Density plot of observed mean differences from 10000 simulations")
+  ggtitle("Mean differences from 10000 simulations")
 ```
 
 The red vertical line indicates the difference in proportions observed in the actual dataset. The p-value for a two-tailed test is calculated below.
@@ -76,8 +84,10 @@ varAA
 varUA and varAA indicate the variances of United Airlines' and American Airlines' delay times, respectively. A simulation just like the last problem will be used to test if the difference in these variances is statistically significant.
 
 ```{r}
+# Calculate test statistic
 obs.diff <- varUA-varAA
 
+# Run simulation
 nsim <- 10000
 diffs <- rep(NA, nsim)
 for(i in 1:nsim){
@@ -91,12 +101,14 @@ simdf <- data.frame(diffs)
 ggplot(simdf, aes(x = diffs)) +
   geom_density() +
   geom_vline(xintercept = obs.diff, col = "red") +
-  ggtitle("Density plot of observed variance differences from 10000 simulations")
+  ggtitle("Variance differences from 10000 simulations")
 ```
 
 ```{r}
 (sum(diffs > obs.diff) + 1)/(length(diffs) + 1)
 ```
+
+The density plot and calculated p-value show that the observed variance for United Airlines delays is not significantly greater than observed variances for American Airlines.
 
 ## 3.16
 
@@ -190,10 +202,7 @@ Let Z denote the standard normal random variable. Then Z ~ N(0,1). Suppose $X = 
 
 The pdf of Z is already known to be
 $$
-f_{Z}(z) = \frac{1}{\sqrt{2\pi}}e^{-\frac{x^2}{2}}
-$$
-$$
-F_{Z}(z) = \frac{1}{2} (1 + erf(\frac{x}{\sqrt{2}}))
+f_{Z}(z) = \frac{1}{\sqrt{2\pi}}e^{-\frac{z^2}{2}}
 $$
 
 Using the cdf method,
