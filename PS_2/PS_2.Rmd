@@ -26,7 +26,7 @@ H_0: \theta_{UA} - \theta_{AA} = 0
 $$
   
 $$
-H_A: \theta_{UA} - \theta_{AA} = 0
+H_A: \theta_{UA} - \theta_{AA} \neq 0
 $$
 
 ```{r}
@@ -42,8 +42,8 @@ nsim <- 10000
 means <- rep(NA, nsim)
 for(i in 1:nsim){
   perm <- sample(FlightDelays$Carrier, replace=F)
-  means[i] <- mean(FlightDelays$Delayed20[perm=="UA"] - 
-                     mean(FlightDelays$Delayed20[perm=="AA"]))
+  means[i] <- mean(FlightDelays$Delayed20[perm=="UA"]) - 
+                     mean(FlightDelays$Delayed20[perm=="AA"])
 }
 simdf <- data.frame(means)
 
@@ -92,8 +92,8 @@ nsim <- 10000
 diffs <- rep(NA, nsim)
 for(i in 1:nsim){
   perm <- sample(FlightDelays$Carrier, replace=F)
-  diffs[i] <- var(FlightDelays$Delay[perm=="UA"] - 
-                     var(FlightDelays$Delay[perm=="AA"]))
+  diffs[i] <- var(FlightDelays$Delay[perm=="UA"]) - 
+                     var(FlightDelays$Delay[perm=="AA"])
 }
 simdf <- data.frame(diffs)
 
@@ -153,11 +153,11 @@ q <- c(.2,.4,.6,.8)
 d <- data.frame("quantile" = q)
 obs.stats <- c(12.57,16.87,20.73,24.66)
 d<-cbind(d,obs.stats)
-norm.stats <- rep(NA,4)
+exp.stats <- rep(NA,4)
 for(i in 1:4){
-  norm.stats[i] <- qnorm(q[i],22,7)
+  exp.stats[i] <- qnorm(q[i],22,7)
 }
-d <- cbind(d,norm.stats)
+d <- cbind(d,exp.stats)
 d
 # Calculate observed chi-squared value
 ((3.54^2)/16.11) + ((3.36^2)/20.23) + ((3.04^2)/23.77) + ((3.23^2)/27.89)
@@ -188,12 +188,25 @@ As we'd expect, the simulated density plot follows a uniform distribution.
 ### Analytical Solution
 Consider a test statistic t = $T(x_{1},...,x_{n})$. Its corresponding p-value is calculated by solving
 $$
-p = Pr(T(X) \geq t|H_{0}).
+p = Pr(T(X) \leq t|H_{0}).
 $$
-This makes p a random variable as well, since its calculated probability depends on the random variable T(X). Thus the p-value follows some probability distribution P(T). Since the p-values are drawn from the distribution of T(X), then the p-values have a one-to-one correspondence to each observed test statistic t. Thus,
+This makes p a random variable as well, since its calculated probability depends on the random variable T(X). Thus the p-value p follows some probability distribution $p = F_{T}(T)$. Since the p-values are drawn from the distribution of T(X), then the p-values have a one-to-one correspondence to each observed test statistic t. Thus,
 $$
-Pr(P(T) \geq p) = Pr(T(X) \geq t) = p.
+F_{P}(p) = Pr(P \leq p) = Pr(T(X) \leq t) = Pr(F_{T}(T) \leq p).
 $$
+
+$$
+F_{P}(p) = Pr(F^{-1}_{T}F_{T}(T) \leq F^{-1}_{T}(p))
+$$
+
+$$
+F_{P}(p) = Pr(T \leq F_{T}^{-1}(p))
+$$
+
+$$
+F_{P}(p) = F_{T}(F^{-1}_{T}(p)) = p
+$$
+
 This shows that P(T) follows a uniform distribution, where Pr(p) = 1/n.
 
 ## 3.32
@@ -208,10 +221,15 @@ $$
 Using the cdf method,
 
 $$
-F_{X}(x) = P(X \leq x) = P(Z^{2} \leq x) = P(Z \leq \sqrt{x}) = F_{Z}(\sqrt{x})
+F_{X}(x) =
+P(X \leq x) =
+P(Z^{2} \leq x) =
+P(-\sqrt{x} \leq Z \leq \sqrt{x}) =
+F_{Z}(\sqrt{x}) - F_{Z}(-\sqrt{x})
 $$
 $$
-F_{Z}(\sqrt{x}) =
+P(-\sqrt{x} \leq Z \leq \sqrt{x}) =
+F_{Z}(\sqrt{x}) - F_{Z}(-\sqrt{x}) =
 \int_{-\sqrt{x}}^{\sqrt{x}}
 \frac{1}{\sqrt{2\pi}}
 e^{\frac{-x^2}{2}}
@@ -219,7 +237,7 @@ dx
 $$
 
 $$
-F_{Z}(\sqrt{x}) =
+F_{Z}(\sqrt{x}) - F_{Z}(-\sqrt{x}) =
 2\int_{0}^{\sqrt{x}}
 \frac{1}{\sqrt{2\pi}}
 e^{\frac{-x^2}{2}}
@@ -227,36 +245,36 @@ dx
 $$
 
 $$
-F_{Z}(\sqrt{x}) = 2 \frac{1}{2}erf (\frac{\sqrt{x}}{\sqrt{2}})
+F_{Z}(\sqrt{x}) - F_{Z}(-\sqrt{x}) = 2 \frac{1}{2}erf (\frac{\sqrt{x}}{\sqrt{2}})
 $$
 
 $$
-F_{Z}(\sqrt{x}) = erf (\frac{\sqrt{x}}{\sqrt{2}})
-$$
-
-$$
-f_{X}(x) =
-\frac{\partial}{\partial x} F_{Z}(\sqrt{x})=
-f_{Z}(\sqrt{x}) \frac{1}{2}x^{-\frac{1}{2}}
+F_{Z}(\sqrt{x}) - F_{Z}(-\sqrt{x}) = erf (\frac{\sqrt{x}}{\sqrt{2}})
 $$
 
 $$
 f_{X}(x) =
-\frac{1}{\sqrt{2\pi}}e^{-\frac{x}{2}} \frac{1}{2}x^{-\frac{1}{2}}
+\frac{\partial}{\partial x} (F_{Z}(\sqrt{x}) - F_{Z}(-\sqrt{x}))=
+2f_{Z}(\sqrt{x}) \frac{1}{2}x^{-\frac{1}{2}}
 $$
 
 $$
-f_{X}(x) = \frac{x^{-\frac{1}{2}}e^{-\frac{x}{2}}}{2 \sqrt{2\pi}}
+f_{X}(x) =
+\frac{1}{\sqrt{2\pi}}e^{-\frac{x}{2}} x^{-\frac{1}{2}}
+$$
+
+$$
+f_{X}(x) = \frac{x^{-\frac{1}{2}}e^{-\frac{x}{2}}}{\sqrt{2\pi}}
 $$
 
 Notice that 
 $$\Gamma(1/2) =
 \int_{0}^\infty t^{-1/2}e^{-t} dt=
-\sqrt{2\pi},$$
+\sqrt{\pi},$$
 so we get
 
 $$
-f_{X}(x) = \frac{x^{-\frac{1}{2}}e^{-\frac{x}{2}}}{2 \Gamma(1/2)}
+f_{X}(x) = \frac{x^{-\frac{1}{2}}e^{-\frac{x}{2}}}{\sqrt{2} \Gamma(1/2)}
 $$
 
 Thus,
