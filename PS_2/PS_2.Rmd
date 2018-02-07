@@ -1,7 +1,7 @@
 ---
-title: "MATH 392 Problem Set 2"
+title: "MATH 392 Problem Set 2 (Corrected)"
 author: "EJ Arce"
-date: "2 February 2018"
+date: "9 February 2018"
 output: 
   pdf_document:
     fig_height: 3
@@ -13,7 +13,6 @@ output:
 knitr::opts_chunk$set(echo = TRUE,warning = FALSE)
 require(tidyverse) # load packages
 require(resampledata)
-options(digits=4) # print 4 decimal places only
 set.seed(30) # set seed for reproducibility
 ```
 
@@ -186,21 +185,25 @@ ggplot(ts, aes(x=p.val)) +
 As we'd expect, the simulated density plot follows a uniform distribution.
 
 ### Analytical Solution
+
 Consider a test statistic t = $T(x_{1},...,x_{n})$. Its corresponding p-value is calculated by solving
+
 $$
 p = Pr(T(X) \leq t|H_{0}).
 $$
-This makes p a random variable as well, since its calculated probability depends on the random variable T(X). Thus the p-value p follows some probability distribution $p = F_{T}(T)$. Since the p-values are drawn from the distribution of T(X), then the p-values have a one-to-one correspondence to each observed test statistic t. Thus,
+
+This makes p a random variable as well, since its calculated probability depends on the random variable T(X). Thus the p-value p follows some probability distribution $P = F_{T}(T)$. Since the p-values are drawn from the distribution of T(X), then the p-values have a one-to-one correspondence to each observed test statistic t. Thus,
+
 $$
-F_{P}(p) = Pr(P \leq p) = Pr(T(X) \leq t) = Pr(F_{T}(T) \leq p).
+F_{P}(p) = P(P \leq p) = Pr(T(X) \leq t) = Pr(F_{T}(T) \leq p).
 $$
 
 $$
-F_{P}(p) = Pr(F^{-1}_{T}F_{T}(T) \leq F^{-1}_{T}(p))
+F_{P}(p) = P(F^{-1}_{T}F_{T}(T) \leq F^{-1}_{T}(p))
 $$
 
 $$
-F_{P}(p) = Pr(T \leq F_{T}^{-1}(p))
+F_{P}(p) = P(T \leq F_{T}^{-1}(p))
 $$
 
 $$
@@ -252,9 +255,11 @@ $$
 F_{Z}(\sqrt{x}) - F_{Z}(-\sqrt{x}) = erf (\frac{\sqrt{x}}{\sqrt{2}})
 $$
 
+Since the cdf we are differentiating over is $P(-\sqrt{x} \leq Z \leq \sqrt{x})$, we can rexpress this cdf as $2F_{Z}(\sqrt{x}) - 1$, so when taking the partial derivative, the coefficient 2 remains in front of the pdf $f_{Z}(\sqrt{x})$. Thus,
+
 $$
 f_{X}(x) =
-\frac{\partial}{\partial x} (F_{Z}(\sqrt{x}) - F_{Z}(-\sqrt{x}))=
+\frac{\partial}{\partial x} (2F_{Z}(\sqrt{x}) - 1) =
 2f_{Z}(\sqrt{x}) \frac{1}{2}x^{-\frac{1}{2}}
 $$
 
