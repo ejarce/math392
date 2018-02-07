@@ -1,0 +1,105 @@
+---
+title: "MATH 392 Problem Set 3"
+author: "EJ Arce"
+date: "7 February 2018"
+output: 
+  pdf_document:
+    fig_height: 3
+    fig_width: 6
+---
+
+
+```{r, include=FALSE}
+require(tidyverse) # load packages
+require(resampledata)
+set.seed(30) # set seed for reproducibility
+```
+
+## 4.8
+
+$$
+n = 20, \mu = 6, \sigma^{2} = 10
+$$
+
+$$
+P(\bar{X} \leq 4.6) =
+P(\frac{\bar{X}-\mu}{\sigma / \sqrt{n}} \leq
+\frac{4.6 -\mu}{\sigma / \sqrt{n}})
+$$
+
+$$
+P(\bar{X} \leq 4.6) =
+P(\frac{\bar{X}-6}{\sqrt{10} / \sqrt{20}} \leq
+\frac{4.6 -6}{\sqrt{10}  / \sqrt{20}})
+$$
+
+```{r}
+# Calculate Z score of interested statistic
+(4.6-6)/(sqrt(10)/sqrt(20))
+```
+
+$$
+P(\bar{X} \leq 4.6) = P(Z \leq -1.98)
+$$
+
+```{r}
+# Calculate probability using the cdf of N(0,1)
+pnorm(-1.98, 0, 1)
+```
+
+$$
+P(\bar{X} \leq 4.6) = .02385
+$$
+
+## 4.9
+
+$$
+f_{X}(x) = \frac{3}{16}(x-4)^{2} for 2 \leq 6
+$$
+
+Find E[X]:
+
+$$
+E[X] = \int_{2}^{6} x \frac{3}{16}(x-4)^{2} dx
+$$
+
+$$
+E[X] = \int_{2}^{6} \frac{3}{16}x(x^{2}-8x+16) dx
+$$
+
+$$
+E[X] = \int_{2}^{6} \frac{3}{16}x^{3}- \frac{3}{2}x^{2}+3x dx
+$$
+
+$$
+E[X] = \frac{3}{64}x^{4} - \frac{1}{2}x^{3} + \frac{3}{2}x^{2} \vert_{2}^{6}
+$$
+
+$$
+E[X] = 4
+$$
+
+Find V[X]:
+
+
+
+## 4.12
+
+
+
+## 4.13
+
+
+
+## 4.18
+
+
+
+## 4.20
+
+
+
+## 4.21
+
+
+
