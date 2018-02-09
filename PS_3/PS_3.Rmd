@@ -35,7 +35,8 @@ $$
 
 ```{r}
 # Calculate Z score of interested statistic
-(4.6-6)/(sqrt(10)/sqrt(20))
+z.obs <- (4.6-6)/(sqrt(10)/sqrt(20))
+z.obs
 ```
 
 $$
@@ -44,7 +45,7 @@ $$
 
 ```{r}
 # Calculate probability using the cdf of N(0,1)
-pnorm(-1.98, 0, 1)
+pnorm(z.obs, 0, 1)
 ```
 
 $$
@@ -81,14 +82,126 @@ $$
 
 Find V[X]:
 
+$$
+V[X] = E[X^{2}] - E[X]^{2}
+$$
+
+We already calculated that $E[X]=4$, so $E[X]^{2}$ = 16. Now solve for $E[X^2]$:
+
+$$
+E[X^{2}] = \int_{2}^{6} x^{2} f(x) dx
+$$
+
+$$
+E[X^{2}] = \int_{2}^{6} x^{2} \frac{3}{16}(x-4)^{2} dx
+$$
+
+$$
+E[X^{2}] = \int_{2}^{6} \frac{3}{16}x^{4}- \frac{3}{2}x^{3}+3x^{2} dx
+$$
+
+$$
+E[X^{2}] = \frac{3}{80}x^{5}- \frac{3}{8}x^{4}+x^{3} \vert_{2}^{6}
+$$
+
+```{r}
+# Calculate
+e.xsq <- (3*(6^5)/80 - 3*(6^4)/8 +6^3) -
+  (3*(2^5)/80 - 3*(2^4)/8 +(2^3))
+e.xsq
+sq.ex <- 4^2
+var.x <- e.xsq-sq.ex
+sd.x <- sqrt(var.x)
+sd.x
+```
+
+Thus $V[X] = 2.4$, so SD[X] = $\sqrt{2.4}$ = 1.549. Now, $n = 244, \mu = 4, \sigma^{2} = 2.4$.
+
+$$
+P(\bar{X} \geq 4.2) =
+P(\frac{\bar{X}-\mu}{\sigma / \sqrt{n}} \geq
+\frac{4.2 -\mu}{\sigma / \sqrt{n}})
+$$
+
+$$
+P(\bar{X} \geq 4.2) =
+P(\frac{\bar{X}-4}{\sqrt{2.4} / \sqrt{244}} \geq
+\frac{4.2 -4}{\sqrt{2.4} / \sqrt{244}})
+$$
+
+$$
+P(\bar{X} \geq 4.2) =
+P(Z \geq \frac{4.2 -4}{\sqrt{2.4} / \sqrt{244}})
+$$
+
+```{r}
+# Calculate Z score of interested statistic
+z.obs <- (4.2-4)/(sqrt(2.4)/sqrt(244))
+z.obs
+```
+
+```{r}
+# Calculate probability using cdf from N(0,1)
+1 - pnorm(z.obs,0,1)
+```
 
 
 ## 4.12
 
+### a
 
+Let X be a random sample of size 30 from the exponential distribution with rate $\lambda = .1$. The expected value of the sample mean is the same as the expected value of the population, by linearity of expectation. Thus, E[X] = $\frac{1}{\lambda}$ = 10
+
+### b
+
+```{r}
+# Run simulation
+nsim <- 1000
+n <- 30
+rate <- 1/10
+means <- rep(NA,nsim)
+for(i in 1:nsim){
+  sample <- rexp(n,rate)
+  means[i] <- mean(sample)
+}
+sum(means >= 12)/nsim
+```
+
+### c
+
+Since 12.1% of the samples had means of 12 or greater, this observation is not that unusual.
 
 ## 4.13
 
+### a
+
+Since X ~ $N(20,8^{2})$ and Y $~ N(16,7^{2})$ are independent variables, and W = $\bar{X} + \bar{Y}$, then W ~ $N(36,\frac{8^{2}}{10} + \frac{7^{2}}{15})$
+
+### b
+
+```{r}
+nsim <- 10000
+w <- rep(NA,nsim)
+for(i in 1:nsim){
+  x <- rnorm(10,20,8)
+  y <- rnorm(15,16,7)
+  w[i] <- mean(x) + mean(y)
+}
+# Compute mean and standard error
+mean(w)
+sd(w)
+# Plot sampling distribution
+w <- data.frame(w)
+ggplot(w,aes(x=w)) +
+  geom_density() +
+  geom_vline(xintercept=40)
+```
+
+### c
+
+```{r}
+sum(w<40)/nsim
+```
 
 
 ## 4.18
