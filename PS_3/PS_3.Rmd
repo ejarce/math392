@@ -200,19 +200,192 @@ ggplot(w,aes(x=w)) +
 ### c
 
 ```{r}
-sum(w<40)/nsim
+(sum(w<40) + 1) /( nsim + 1)
 ```
 
 
 ## 4.18
 
+### a
 
+```{r}
+# Simulate sampling distribution
+nsim <- 10000
+n <- 30
+rate <- 1/3
+x.bars <- rep(NA,nsim)
+for(i in 1:nsim){
+  sample <- rexp(n,rate)
+  x.bars[i] <- mean(sample)
+}
+```
+
+### b
+
+```{r}
+# Compute and compare simulated mean and standard error with theoretical results
+mean.sim <- mean(x.bars)
+se.sim <- sd(x.bars)
+mean.theory <- 1/rate
+se.theory <- (1/rate)/sqrt(n)
+mean.sim
+mean.theory
+se.sim
+se.theory
+```
+
+### c
+
+```{r}
+# Calculate simulated probability
+d <- data.frame(x.bars)
+(sum(x.bars <= 3.5) + 1) / (nsim + 1)
+```
+
+### d
+
+$$
+n = 30, X ~ exp(1/3), \mu = 1/3, \sigma^{2} = 9
+$$
+
+$$
+P(\bar{X} \leq 3.5) = 
+P(
+\frac{\bar{X} - \mu}{\sqrt{\sigma^{2}}/\sqrt{n}} \leq
+\frac{3.5 - \mu}{\sqrt{\sigma^{2}}/\sqrt{n}}
+) =
+P(
+\frac{\bar{X} - 3}{\sqrt{9}/\sqrt{30}} \leq
+\frac{3.5 - 3}{\sqrt{9}/\sqrt{30}}
+)
+$$
+
+```{r}
+# Calculate z score we are testing
+z.test <- (3.5-3)/(sqrt(9)/sqrt(30))
+z.test
+```
+
+$$
+P(\bar{X} \leq 3.5) =
+P(Z \leq .9129)
+$$
+
+```{r}
+# Calculate approximated probability
+pnorm(z.obs,0,1)
+```
+
+$P(\bar{X} \leq 3.5) = .8193$. The approximated result is similar to the simulated probability of .8252.
 
 ## 4.20
 
+$Let X_{1},...,X_{n} be continuouus and i.i.d. random variables with pdf f and cdf F. Show that the pdf's for X_{min} and X_{max} are
 
+$$
+f_{min}(x) = n(1-F(x))^{n-1}f(x)
+$$
+
+$$
+f_{max}(x) = nF(x)^{n-1}(x)f(x)
+$$
+
+First, show the pdf of $X_{max}$:
+
+$$
+F_{max}(x) = P(max{X_{1},...,X_{n}} \leq x)
+$$
+
+$$
+F_{max}(x) = P(X_{1} \leq x,...,X_{n} \leq x)
+$$
+
+Because the variables are i.i.d.,
+
+$$
+F_{max}(x) = P(X_{1} \leq x)...P(X_{n} \leq x)
+$$
+
+$$
+F_{max}(x) = F(x)...F(x) = F(x)^n
+$$
+
+Now, differentiate to find $f_{max}(x)$:
+
+$$
+f_{max}(x) = \frac{\partial}{\partial x} F_{max}(x) = nF(x)^{n-1}f(x)
+$$
+
+Now show the pdf$f_{min}(x)$:
+
+$$
+F_{min}(x) = P(min{X_{1},...,X_{n}} \leq x)
+$$
+
+At least one of the variables $X_{i} \leq x$, so we can use the probability that none of the random variables will be less than x, and subtract that from 1:
+
+$$
+F_{min}(x) = (1 - P(X_{1}\leq x))...(1 - P(X_{n}\leq x))
+$$
+
+$$
+F_{min}(x) = (1 - P(X\leq x))^{n} = (1-F(x))^{n}
+$$
+
+Now differentiate to find $f_{min}(x)$:
+
+$$
+f_{min}(x) =
+\frac{\partial}{\partial x} F_{min}(x) =
+n(1-F(x))^{n-1}f(x)
+$$
 
 ## 4.21
 
+### a
 
+By theorem 4.1, $f_{max}(x) = nF(x)^{n-1}f(x)$. In this case, n = 2, and $f(x) = 2/x^{2} for 1 \leq x \leq 2$. So
 
+$$
+f_{max}(x) = 2(2/x^{2})\int_{1}^{x} 2/x^{-2} dx
+$$
+
+$$
+f_{max}(x) = 2(2/x^{2}) (-2x^{-1} \vert_{1}^{x}) 
+$$
+
+$$
+f_{max}(x) = 2(2/x^{2}) (2(1-1/x))
+$$
+
+$$
+f_{max}(x) = \frac{8-8/x}{x^{2}}
+$$
+
+### b
+
+Solve for E[X]:
+
+$$
+E[X] = \int_{1}^{2}xf_{max}(x) dx
+$$
+
+$$
+E[X] = \int_{1}^{2}x \frac{8-8/x}{x^{2}} dx
+$$
+
+$$
+E[X] = \int_{1}^{2}8x^{-1} - 8x^{-2} dx
+$$
+
+$$
+E[X] = 8lnx + 8x^{-1} \vert_{1}^{2} = (8 ln2 + 4) - (8ln1 + 8)
+$$
+
+$$
+E[X] = (8 ln2 + 4) - (8ln1 + 8) = 8ln2+4 - (0+8)
+$$
+
+$$
+E[X] \approx 1.545.
+$$
