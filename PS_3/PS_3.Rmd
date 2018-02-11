@@ -443,20 +443,210 @@ mean(indicator)
 ### a
 
 ```{r}
+# Similate sampling distribution
 nsim <- 1000
 n <- 200
+shape <- 5
+rate <- 1/4
+means <- rep(NA,nsim)
 for(i in 1:nsim){
-  sample <- rexp()
+  sample <- rgamma(n,shape,rate)
+  means[i] <- mean(sample)
 }
+df.sample <- data.frame(means)
+samp.dist <- ggplot(df.sample, aes(x=means)) +
+  geom_density()
+samp.dist
 ```
 
+As expected, the distribution is approximately normal and is centered at 20.
 
 ### b
 
+```{r}
+sample <- rgamma(n,shape,rate)
+df <- data.frame(sample)
+ggplot(df,aes(x=sample)) +
+  geom_histogram()
+mean(sample)
+sd(sample)
+```
+
 ### c
+
+```{r}
+means <- rep(NA,nsim)
+for(i in 1:nsim){
+  boot <- sample(sample,n,replace=T)
+  means[i] <- mean(boot)
+}
+df.boot <- data.frame(means)
+boot.dist <- ggplot(df.boot,aes(x=means)) +
+  geom_density()
+mean <- mean(df.boot$means)
+se <- sd(df.boot$means)
+boot.dist
+mean
+se
+```
+
 
 ### d
 
+```{r}
+ggplot(df.sample, aes(x=means, col ="blue")) +
+  geom_density() +
+  geom_density(data = df.boot, aes(col="red")) +
+  scale_color_manual(labels = c("Approximated sampling distribution",
+                                "Bootstrap distribution"),
+                     values = c("blue","red"))
+```
+
+The two distributions appear similar in skew and shape, but the bootstrap distribution estimates the mean of the population to be higher than the sampling distribution's estimate.
+
 ### e
 
+The codes producing the graphs below are exactly the same as the codes for problems a-d, exect n is changed to 50 and 10, respectively.
+
+#### n = 50
+
+```{r,echo=FALSE}
+# Similate sampling distribution
+nsim <- 1000
+n <- 50
+shape <- 5
+rate <- 1/4
+means <- rep(NA,nsim)
+for(i in 1:nsim){
+  sample <- rgamma(n,shape,rate)
+  means[i] <- mean(sample)
+}
+df.sample <- data.frame(means)
+samp.dist <- ggplot(df.sample, aes(x=means)) +
+  geom_density()
+```
+
+```{r,echo=FALSE}
+sample <- rgamma(n,shape,rate)
+df <- data.frame(sample)
+```
+
+```{r,echo=FALSE}
+means <- rep(NA,nsim)
+for(i in 1:nsim){
+  boot <- sample(sample,n,replace=T)
+  means[i] <- mean(boot)
+}
+df.boot <- data.frame(means)
+boot.dist <- ggplot(df.boot,aes(x=means)) +
+  geom_density()
+```
+
+```{r,echo=FALSE}
+ggplot(df.sample, aes(x=means, col ="blue")) +
+  geom_density() +
+  geom_density(data = df.boot, aes(col="red")) +
+  scale_color_manual(labels = c("Approximated sampling distribution",
+                                "Bootstrap distribution"),
+                     values = c("blue","red"))
+```
+
+#### n = 10
+
+```{r,echo=FALSE}
+# Similate sampling distribution
+nsim <- 1000
+n <- 10
+shape <- 5
+rate <- 1/4
+means <- rep(NA,nsim)
+for(i in 1:nsim){
+  sample <- rgamma(n,shape,rate)
+  means[i] <- mean(sample)
+}
+df.sample <- data.frame(means)
+samp.dist <- ggplot(df.sample, aes(x=means)) +
+  geom_density()
+```
+
+```{r,echo=FALSE}
+sample <- rgamma(n,shape,rate)
+df <- data.frame(sample)
+```
+
+```{r,echo=FALSE}
+means <- rep(NA,nsim)
+for(i in 1:nsim){
+  boot <- sample(sample,n,replace=T)
+  means[i] <- mean(boot)
+}
+df.boot <- data.frame(means)
+boot.dist <- ggplot(df.boot,aes(x=means)) +
+  geom_density()
+```
+
+```{r,echo=FALSE}
+ggplot(df.sample, aes(x=means, col ="blue")) +
+  geom_density() +
+  geom_density(data = df.boot, aes(col="red")) +
+  scale_color_manual(labels = c("Approximated sampling distribution",
+                                "Bootstrap distribution"),
+                     values = c("blue","red"))
+```
+
+For both the sampling distribution and the bootstrap distribution, the variance of the mean estimates increases as the sample size, n, decreases. Changing the sample size does not appear to change the mean estimate in any particular way. In each case, the sampling distribution provides a better estimate of the mean than the bootstrap distribution.
+
 ## 5.12
+
+### a
+
+```{r}
+ggplot(FishMercury,aes(x=Mercury)) +
+  geom_histogram(binwidth=.01)
+```
+
+The data includes 29 observations with a mercury level of less than .25 parts per million and 1 observation with a mercury level of 1.87 parts per million.
+
+### b
+
+```{r}
+data(FishMercury)
+nsim <- 10000
+n <- 30
+means <- rep(NA,nsim)
+for(i in 1:nsim){
+  boot <- sample(FishMercury$Mercury, n, replace=T)
+  means[i] <- mean(boot)
+}
+se.boot <- sd(means)
+se.boot
+CI <- quantile(means, probs = c(.025,.975))
+CI
+```
+
+
+### c
+
+```{r}
+# Remove outlier
+FishMercury2 <- FishMercury %>%
+  filter(Mercury < 1)
+
+# Repeat simulation
+nsim <- 10000
+n <- 30
+means <- rep(NA,nsim)
+for(i in 1:nsim){
+  boot <- sample(FishMercury2$Mercury, n, replace=T)
+  means[i] <- mean(boot)
+}
+se.boot <- sd(means)
+se.boot
+CI <- quantile(means, probs = c(.025,.975))
+CI
+```
+
+
+### d
+
+The standard error greatly reduced, now that the outlier can't affect the mean estimate in each bootstrap sample.
