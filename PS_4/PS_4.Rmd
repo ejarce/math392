@@ -139,10 +139,102 @@ Thus $\theta_{MLE}  = \frac{\bar{x}\sqrt{n}}{\sqrt{3}}$.
 
 ## 6.11
 
+As before,
+
+$$
+L(\lambda) = \prod_i^n f(x_{i}) \prod_j^m f(y_{i})
 $$
 
 $$
+L(\lambda) =
+\prod_i^n \lambda e^{-\lambda x_i}
+\prod_j^m \lambda e^{-\lambda y_j}
+$$
+
+$$
+L(\lambda) =
+\lambda^{n+m}\lambda
+e^{-\lambda(\sum_{i}^{n}x_{i}+\sum_{j}^{m}y_{j})}
+$$
+
+$$
+ln(L(\lambda)) =
+(n+m)ln(\lambda) -
+\lambda(\sum_{i}^{n}x_{i}+\sum_{j}^{m}y_{j})
+$$
+
+$$
+\frac
+{\partial ln(L(\lambda))}
+{\partial \lambda}=
+(n+m)/\lambda -
+(\sum_{i}^{n}x_{i}+\sum_{j}^{m}y_{j}) = 0
+$$
+
+$$
+\lambda =
+\frac{n+m}
+{\sum_{i}^{n}x_{i}+\sum_{j}^{m}y_{j}}
+$$
+
+Thus, $\lambda_{MLE} = \frac{n+m}{\sum_{i}^{n}x_{i}+\sum_{j}^{m}y_{j}}$.
 
 ## 6.13
 
+### a
 
+$$
+L(\alpha|X;\beta) =
+\alpha \beta x^{\beta - 1} e^{-\alpha x^{\beta}}
+$$
+
+$$
+ln(L(\alpha|X;\beta)) =
+ln\alpha + ln\beta +(\beta - 1)lnx + ln(e^{-\alpha x^{\beta}})
+$$
+
+$$
+ln(L(\alpha|X;\beta)) =
+ln\alpha + ln\beta +(\beta - 1)lnx -\alpha x^{\beta}
+$$
+
+$$
+\frac{\partial{ln(L(\alpha|X;\beta))}}{\partial \alpha}=
+\frac{1}{\alpha} - x^{\beta} = 0
+$$
+
+$$
+\alpha = \frac{1}{x^{\beta}}
+$$
+
+Thus $\alpha_{MLE} = \frac{1}{x^{\beta}}$.
+
+### b
+
+$$
+L(\alpha;\beta|X) =
+\alpha \beta x^{\beta - 1} e^{-\alpha x^{\beta}}
+$$
+
+Take the natural log of both sides:
+
+$$
+ln(L(\alpha;\beta|X)) =
+ln \alpha + ln \beta + (\beta - 1)ln x -\alpha x^{\beta}
+$$
+
+Differentiate with respect to $\alpha$ and $\beta$ and set to 0. Solve simultaneously for a and b:
+
+$$
+\frac{\partial ln(L(\alpha|X))}
+{\partial \alpha}=
+1/\alpha - x^{\beta} = 0
+$$
+
+and
+
+$$
+\frac{\partial ln(L(\beta|X))}
+{\partial \beta}=
+1/\beta - +ln x - ax^{\beta} = 0
+$$
