@@ -1,0 +1,148 @@
+---
+title: "MATH 392 Problem Set 4"
+author: "EJ Arce"
+date: "17 February 2018"
+output: 
+  pdf_document:
+    fig_height: 3
+    fig_width: 6
+---
+
+
+```{r, include=FALSE}
+require(tidyverse) # load packages
+require(resampledata)
+set.seed(30) # set seed for reproducibility
+```
+
+## 6.2
+
+Let $x_{1},...,x_{n}$ ~ Poisson($\lambda$). Show the maximum likelihood estimate of $\lambda$ is $\hat{\lambda}=\bar{x}$:
+
+$$
+L(\lambda|x_{1},...,x_{n}) = P(X_{1} = x_{1},...,X_{n}=x_{n})
+$$
+
+$$
+L(\lambda|x_{1},...,x_{n}) = P(X = x_{1})...P(X=x_{n})
+$$
+
+$$
+L(\lambda|x_{1},...,x_{n}) = \prod_{i}^{n}\frac{\lambda^{x_{i}}e^{-\lambda}}{x_{i}!}
+$$
+
+$$
+L(\lambda|x_{1},...,x_{n}) = \frac{e^{-\lambda n}\lambda^{\sum_{i}^{n}{x_{i}}}}{\prod_{i}^{n}x_{i}!}
+$$
+
+Take the natural log of both sides to make the derivation easier:
+
+$$
+ln(L(\lambda|x_{1},...,x_{n})) =
+ln(e^{-n\lambda}) +
+ln(\lambda^{\sum_{i}^{n}{x_{i}}}) -
+ln(\prod_{i}^{n}x_{i}!)
+$$
+
+$$
+ln(L(\lambda|x_{1},...,x_{n})) =
+-n\lambda +
+ln(\lambda)\sum_{i}^{n}{x_{i}} -
+ln(\prod_{i}^{n}x_{i}!)
+$$
+
+Derive with respect to $\lambda$ and set equal to 0:
+
+$$
+\frac{\partial ln(L(\lambda|x_{1},...,x_{n}))}{\partial \lambda} =
+-n +
+\frac{\sum_{i}^{n}{x_{i}}}{\lambda} =
+0
+$$
+
+$$
+\frac{\partial ln(L(\lambda|x_{1},...,x_{n}))}{\partial \lambda} =
+\lambda = 
+\frac{\sum_{i}^{n}{x_{i}}}{n} = \bar{x}
+$$
+
+Thus $\lambda_{MLE} = \bar{x}$
+
+## 6.8
+
+$$
+f(x;\theta) = \frac{\sqrt{2/\pi}x^{2}e^{-x^{2}/2\theta^{2}}}{\theta^{3}}
+$$
+
+$$
+L(\theta|x_{1},...,x_{n}) =
+\prod_{i}^{n}f(x_{i};\theta)
+$$
+
+$$
+L(\theta|x_{1},...,x_{n}) =
+\prod_{i}^{n}
+\frac{\sqrt{2/\pi}x_{i}^{2}
+e^{-x_{i}^{2}/2\theta^{2}}}
+{\theta^{3}}
+$$
+
+$$
+L(\theta|x_{1},...,x_{n}) =
+(\frac{\sqrt{2/\pi}}
+{\theta^3})^n
+\prod_{i}^{n}
+x_{i}^{2}
+e^{-x_{i}^{2}/2\theta^{2}}
+$$
+
+$$
+ln(L(\theta|x_{1},...,x_{n})) =
+ln(\frac{\sqrt{2/\pi}}
+{\theta^3})^n +
+\sum_{i}^{n}
+ln(x_{i}^{2}) +
+\sum_{i}^{n}
+ln(e^{-x_{i}^{2}/2\theta^{2}})
+$$
+
+$$
+ln(L(\theta|x_{1},...,x_{n})) =
+ln\sqrt{2/\pi} -
+ln \theta^3 +
+\sum_{i}^{n}
+ln(x_{i}^{2}) +
+\sum_{i}^{n}
+-x_{i}^{2}/2\theta^{2}
+$$
+
+Derive with respect to $\theta$ and set to 0:
+
+$$
+\frac{\partial(L(\theta|x_{1},...,x_{n}))}{\partial\theta} =
+-\frac{n}{\theta^3}3\theta^{2} + \sum_i^n{x_i^{2}/\theta^{3}} = 0
+$$
+
+$$
+\frac{3n}{\theta} = \frac{\sum_i^n x_{i}^2}{\theta^3}
+$$
+
+$$
+\theta = \frac{
+\bar{x}
+\sqrt{n}
+}
+{\sqrt{3}}
+$$
+
+Thus $\theta_{MLE}  = \frac{\bar{x}\sqrt{n}}{\sqrt{3}}$.
+
+## 6.11
+
+$$
+
+$$
+
+## 6.13
+
+
