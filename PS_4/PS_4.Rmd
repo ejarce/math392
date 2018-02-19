@@ -17,6 +17,8 @@ set.seed(30) # set seed for reproducibility
 
 ## 6.2
 
+### Analytical Solution
+
 Let $x_{1},...,x_{n}$ ~ Poisson($\lambda$). Show the maximum likelihood estimate of $\lambda$ is $\hat{\lambda}=\bar{x}$:
 
 $$
@@ -68,7 +70,38 @@ $$
 
 Thus $\lambda_{MLE} = \bar{x}$
 
+### Empirical Solution
+
+```{r}
+# Build function
+e <- exp(1)
+pois <- function(lambda, x){
+  n <- length(x)
+  sum.x <- sum(x)
+  prod.fact <- prod(factorial(x))
+  e^(-lambda*n)*(lambda^(sum.x))/(prod.fact)
+}
+
+# Create sequence of lambdas for MLE plot
+lambdas <- seq(from = 0, to = 20, by = .05)
+# Draw random sample of x's
+x <- sample(1:10,30,replace=T)
+# Apply pois function to find likelihoods
+L_pois <- pois(lambdas,x)
+
+# Plot
+df <- data.frame(x = lambdas,
+                 y = L_pois)
+ggplot(df, aes(x=x,y=y)) +
+  geom_line() +
+  geom_vline(xintercept = mean(x), col = "red")
+```
+
+A red line above indicates the mean of the random sample. As expected, the highest likelihood for $\lambda$ is at the sample mean.
+
 ## 6.8
+
+### Analytical Solution
 
 $$
 f(x;\theta) = \frac{\sqrt{2/\pi}x^{2}e^{-x^{2}/2\theta^{2}}}{\theta^{3}}
@@ -136,6 +169,36 @@ $$
 $$
 
 Thus $\theta_{MLE}  = \frac{\bar{x}\sqrt{n}}{\sqrt{3}}$.
+
+### Empirical Solution
+
+```{r}
+# Build function
+f <- function(theta, x){
+  e <- exp(1)
+  n <- length(x)
+  sec.term <- (x^2)*e^((-x^2)/(2*(theta)^2))
+  prod.x <- prod(sec.term)
+  ((sqrt(2/pi)/theta)^n)*prod.x
+}
+
+# Create sequence of thetas for MLE plot
+thetas <- seq(from = .1, to = 30, by = .1)
+# Reset seed and draw random sample of x's
+set.seed(23)
+x <- sample(1:10,30,replace=T)
+# Apply function to find likelihoods
+L_theta <- f(thetas,x)
+# Find x-intercept from analytical solution
+n <- length(x)
+analytical.sol <- mean(x)*sqrt(n)/sqrt(3)
+# Plot
+df <- data.frame(x = thetas,
+                 y = L_theta)
+ggplot(df, aes(x=x,y=y)) +
+  geom_line() +
+  geom_vline(xintercept = analytical.sol, col = "red")
+```
 
 ## 6.11
 
