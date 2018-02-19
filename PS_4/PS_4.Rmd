@@ -202,10 +202,12 @@ ggplot(df, aes(x=x,y=y)) +
 
 ## 6.11
 
+### Analytical Solution
+
 As before,
 
 $$
-L(\lambda) = \prod_i^n f(x_{i}) \prod_j^m f(y_{i})
+L(\lambda) = \prod_i^n f(x_{i}) \prod_j^m f(y_{j})
 $$
 
 $$
@@ -241,6 +243,39 @@ $$
 $$
 
 Thus, $\lambda_{MLE} = \frac{n+m}{\sum_{i}^{n}x_{i}+\sum_{j}^{m}y_{j}}$.
+
+### Empirical Solution
+
+```{r}
+# Build function
+e <- exp(1)
+pois <- function(lambda,x,y){
+  n <- length(x)
+  m <- length(y)
+  p.x <- (lambda^n)*prod((e^(-lambda*x)))
+  p.y <- (lambda^m)*prod((e^(-lambda*y)))
+  p.x*p.y
+}
+
+# Create sequence of lambdas for MLE plot
+lambdas <- seq(from = 0, to = 20, by = .05)
+# Draw random sample of x's
+set.seed(11)
+x <- sample(1:10,30,replace=T)
+set.seed(35)
+y <- sample(1:10,40,replace=T)
+# Apply pois function to find likelihoods
+L_pois <- pois(lambdas,x,y)
+# Calculate analytical solution
+obs <- (length(x)+length(y))/(sum(x) + sum(y))
+# Plot
+df <- data.frame(x = lambdas,
+                 y = L_pois)
+ggplot(df, aes(x=x,y=y)) +
+  geom_line() +
+  geom_vline(xintercept = obs, col = "red")
+```
+
 
 ## 6.13
 
