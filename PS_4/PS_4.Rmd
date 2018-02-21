@@ -418,6 +418,59 @@ Thus our method of moment estimates are $\hat{\alpha}_{MOM}$ = .27, $\hat{\beta}
 
 ## 6.20
 
+### a
+
+$$
+L(\theta) =
+\prod_{i=1}^{5} f(x_{i}|\theta) =
+\prod_{i=1}^{5} \theta x_{i}^{\theta-1}
+$$
+
+$$
+L(\theta) =
+\theta(\prod_{i=1}^{5}x_{i})^{\theta - 1}
+$$
+
+Differentiate, set equal to 0, and solve for $\theta$:
+
+$$
+\frac{\partial L(\theta)}{\partial \theta} =
+5\theta^{4} (\prod_{i = 1}^{5} x_{i})^{\theta-1} +
+\theta^{5}(\prod_{i = 1}^{5} x_{i})^{\theta-1}ln(\prod_{i = 1}^{5} x_{i}) = 0
+$$
+
+$$
+\theta^{4}(\prod_{i = 1}^{5} x_{i})^{\theta-1}(5 + \theta ln(\prod_{i = 1}^{5} x_{i})) = 0
+$$
+
+$$
+\theta = \frac{-5}{ln(\prod_{i = 1}^{5} x_{i})} \approx 1.57
+$$
+
+Thus $\theta_{MLE} \approx$ 1.57.
+
+### b
+
+$$
+\mu_{1} = E[X] = \int_{0}^{1}\theta x^{\theta-1} x dx = \int_{0}^{1}\theta x^{\theta} dx
+$$
+
+$$
+\mu_{1} = \frac{\theta}{\theta+1}x^{\theta+1}|_{0}^{1} = \frac{\theta}{\theta+1}
+$$
+
+$$
+\hat{\mu}_{1} = \frac{\theta}{\theta+1} = \bar{X}
+$$
+
+Rearranging gives:
+
+$$
+\theta = \frac{\bar{X}}{1-\bar{X}} = \frac{.594}{1-.594} = 1.463
+$$
+
+Thus $\theta_{MOM} \approx$ 1.463.
+
 ## 6.25
 
 ## 6.27
