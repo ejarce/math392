@@ -473,4 +473,69 @@ Thus $\theta_{MOM} \approx$ 1.463.
 
 ## 6.25
 
+$\forall i \epsilon$ {1,..,n}, $a_{i} = \frac{1}{n}$
+
 ## 6.27
+
+### a
+
+bias = $E[\hat{\sigma}^{2}] - \sigma^{2}$
+
+$$
+E[\hat{\sigma}^{2}] =
+E[\frac{1}{n} \sum_{i=1}^{n}(X_{i} - \bar{X})^2] = 
+\frac{1}{n}E[\sum_{i=1}^{n}X_{i}^2 - n\bar{X}^2]
+$$
+
+$$
+E[\hat{\sigma}^{2}] = \frac{1}{n}(\sum_{i=1}^{n}E[X_{i}^2] - E[n\bar{X}^2])
+$$
+
+$$
+E[\hat{\sigma}^{2}] = \frac{n-1}{n}\sigma^{2}
+$$
+
+Thus bias = $\frac{n-1}{n}\sigma^{2} - \sigma^{2} = \frac{-\sigma^2}{n}$
+
+### b 
+
+From theorem B.16, $\frac{(n-1)S^2}{\sigma^2}$ ~ $\chi^2_{n-1}$, where $S^2 = \frac{1}{n-1} \sum_{i=1}^n (X_{i} - \bar{X})^2$. Also, from theorem B.12, V[$\frac{(n-1)S^2}{\sigma^2}$] = 2(n-1). Thus
+
+$$
+\frac{\sum_{i=1}^n (X_{i} - \bar{X})^2}{\sigma^2} \tilde{} \chi^2_{n-1}  
+$$
+
+Replace with $\hat{\sigma}^2$ to get
+
+$$
+\frac{\hat{\sigma}^2 n}{\sigma^2} \tilde{} \chi^2_{n-1}
+$$
+
+Thus
+
+$$
+V[\frac{\hat{\sigma}^2 n}{\sigma^2}] = 2(n-1)
+$$
+
+$$
+V[\hat{\sigma}^2] = \frac{2(n-1)\sigma^{4}}{n^2}
+$$
+
+### c
+
+$$
+MSE[\hat{\sigma}^2] = bias[\hat{\sigma}^2]^{2} + V[\hat{\sigma}^2]
+$$
+
+$$
+MSE[\hat{\sigma}^2] = bias[\hat{\sigma}^2]^{2} + V[\hat{\sigma}^2]
+$$
+
+
+$$
+MSE[\hat{\sigma}^2] = \frac{\sigma^4}{n^2} + \frac{2(n-1)\sigma^{4}}{n^2}
+$$
+
+$$
+MSE[\hat{\sigma}^2] = \frac{2n-\sigma^4}{n^2}
+$$
