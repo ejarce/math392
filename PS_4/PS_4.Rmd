@@ -539,3 +539,90 @@ $$
 $$
 MSE[\hat{\sigma}^2] = \frac{2n-\sigma^4}{n^2}
 $$
+## 6.30
+
+### a
+
+$$
+MSE_{\hat{\theta}_1} = bias_{\hat{\theta}_1}^2 + Var[{\hat{\theta}_1}] = 0 + 25 = 25
+$$
+
+$$
+MSE_{\hat{\theta}_2} = bias_{\hat{\theta}_2}^2 + Var[{\hat{\theta}_2}] = 3^2 + 4 = 13
+$$
+
+Thus $MSE_{\hat{\theta}_2} \leq MSE_{\hat{\theta}_1}$.
+
+### b
+
+$$
+MSE_{\hat{\theta}_2} \leq MSE_{\hat{\theta}_1}
+$$
+
+$$
+b^2 + 4 \leq 25
+$$
+
+$$
+b \leq 4.583
+$$
+
+## 6.31
+
+```{r}
+# Recreate plots using code from sec 6.3.3, changing the sample size
+n <- 30
+curve(x*(1-x)/n,from=0,to=1,xlab="p",ylab="MSE")
+curve(n*(1-x)*x/(n+2)^2+(1-2*x)^2/(n+2)^2, add=TRUE, col="blue",lty=1)
+n <- 50
+curve(x*(1-x)/n,from=0,to=1,xlab="p",ylab="MSE")
+curve(n*(1-x)*x/(n+2)^2+(1-2*x)^2/(n+2)^2, add=TRUE, col="blue",lty=1)
+n <- 100
+curve(x*(1-x)/n,from=0,to=1,xlab="p",ylab="MSE")
+curve(n*(1-x)*x/(n+2)^2+(1-2*x)^2/(n+2)^2, add=TRUE, col="blue",lty=1)
+n <- 200
+curve(x*(1-x)/n,from=0,to=1,xlab="p",ylab="MSE")
+curve(n*(1-x)*x/(n+2)^2+(1-2*x)^2/(n+2)^2, add=TRUE, col="blue",lty=1)
+```
+
+As n increases, the MSE decreases. In each case, the second estimator (the blue line) has a lower MSE except for low and high estimates of p.
+
+## 6.37
+
+### a
+
+$$
+E[\bar{X}] = E[\frac{X_1 + X_2}{2}] = E[X_1]/2 +E[X_2]/2 = E[X]/2 +E[X]/2 = E[X] = 1/\lambda
+$$
+
+### b
+
+$$
+Var[\bar{X}] =
+Var[\frac{X_1 + X_2}{2}] =
+\frac{1}{4}Var[X_1 + X_2] =
+\frac{1}{4}(Var[X] + Var[X]) = 
+\frac{1}{4}(\frac{1}{\lambda^2} + \frac{1}{\lambda^2}) =
+\frac{2}{\lambda^2}
+$$
+
+### c
+
+$$
+E[\sqrt{X_1X_2}] = E[\sqrt{X_1}\sqrt{X_2}] = E[\sqrt{X_1}]E[\sqrt{X_2}] 
+$$
+
+By fact,
+
+$$
+E[\sqrt{X_1X_2}] = \sqrt{\pi}/2\sqrt{\lambda} (\sqrt{\pi}/2\sqrt{\lambda})) = \pi/4\lambda
+$$
+
+### d
+
+$$
+bias = |E[\sqrt{X_1X_2}] - 1/\lambda| = |\pi/4\lambda - 1/\lambda| = |\frac{\pi - 4}{4\lambda}|
+$$
+
+Thus bias = $0.2146/\lambda$.
+
