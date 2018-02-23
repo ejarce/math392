@@ -131,41 +131,33 @@ $$
 
 $$
 ln(L(\theta|x_{1},...,x_{n})) =
-ln(\frac{\sqrt{2/\pi}}
-{\theta^3})^n +
-\sum_{i}^{n}
-ln(x_{i}^{2}) +
-\sum_{i}^{n}
-ln(e^{-x_{i}^{2}/2\theta^{2}})
+ln((\frac{\sqrt{2/\pi}} {\theta^3})^n) +
+\sum_{i}^{n}ln(x_{i}^{2}) +
+\sum_{i}^{n}ln(e^{-x_{i}^{2}/2\theta^{2}})
 $$
 
 $$
 ln(L(\theta|x_{1},...,x_{n})) =
-ln\sqrt{2/\pi} -
-ln \theta^3 +
-\sum_{i}^{n}
-ln(x_{i}^{2}) +
-\sum_{i}^{n}
--x_{i}^{2}/2\theta^{2}
+n (ln\sqrt{2/\pi} - ln \theta^3) +
+\sum_{i}^{n}ln(x_{i}^{2}) -
+\frac{1}{2\theta^2}\sum_{i}^{n} x_{i}^{2}
 $$
 
 Derive with respect to $\theta$ and set to 0:
 
 $$
-\frac{\partial(L(\theta|x_{1},...,x_{n}))}{\partial\theta} =
--\frac{n}{\theta^3}3\theta^{2} + \sum_i^n{x_i^{2}/\theta^{3}} = 0
+\frac{\partial(lnL(\theta|x_{1},...,x_{n}))}{\partial\theta} =
+-\frac{n}{\theta^3}3\theta^{2} + \frac{1}{3\theta^3}\sum_i^n{x_i^{2}} = 0
 $$
 
 $$
-\frac{3n}{\theta} = \frac{\sum_i^n x_{i}^2}{\theta^3}
+\frac{3n}{\theta} = \frac{\sum_i^n x_{i}^2}{3\theta^3}
 $$
 
 $$
-\theta = \frac{
-\bar{x}
-\sqrt{n}
+\theta = \sqrt{
+\frac{\sum_i^n x_{i}^2}{9n}
 }
-{\sqrt{3}}
 $$
 
 Thus $\theta_{MLE}  = \frac{\bar{x}\sqrt{n}}{\sqrt{3}}$.
@@ -175,11 +167,10 @@ Thus $\theta_{MLE}  = \frac{\bar{x}\sqrt{n}}{\sqrt{3}}$.
 ```{r}
 # Build function
 f <- function(theta, x){
-  e <- exp(1)
   n <- length(x)
-  sec.term <- (x^2)*e^((-x^2)/(2*(theta)^2))
-  prod.x <- prod(sec.term)
-  ((sqrt(2/pi)/theta)^n)*prod.x
+  n*(log(sqrt(2/pi)) - log(theta^3)) +
+    sum(log(x^2)) -
+    sum((x^2))/(2*(theta^2))
 }
 
 # Create sequence of thetas for MLE plot
@@ -191,7 +182,7 @@ x <- sample(1:10,30,replace=T)
 L_theta <- f(thetas,x)
 # Find x-intercept from analytical solution
 n <- length(x)
-analytical.sol <- mean(x)*sqrt(n)/sqrt(3)
+analytical.sol <- sqrt(sum(x^2)/9*n)
 # Plot
 df <- data.frame(x = thetas,
                  y = L_theta)
@@ -213,19 +204,19 @@ $$
 $$
 L(\lambda) =
 \prod_i^n \lambda e^{-\lambda x_i}
-\prod_j^m \lambda e^{-\lambda y_j}
+\prod_j^m 2\lambda e^{-2\lambda y_j}
 $$
 
 $$
 L(\lambda) =
-\lambda^{n+m}\lambda
-e^{-\lambda(\sum_{i}^{n}x_{i}+\sum_{j}^{m}y_{j})}
+2^m\lambda^{n+m}\lambda
+e^{-\lambda(\sum_{i}^{n}x_{i}+2\sum_{j}^{m}y_{j})}
 $$
 
 $$
 ln(L(\lambda)) =
 (n+m)ln(\lambda) -
-\lambda(\sum_{i}^{n}x_{i}+\sum_{j}^{m}y_{j})
+\lambda(\sum_{i}^{n}x_{i}+2\sum_{j}^{m}y_{j})
 $$
 
 $$
@@ -233,16 +224,16 @@ $$
 {\partial ln(L(\lambda))}
 {\partial \lambda}=
 (n+m)/\lambda -
-(\sum_{i}^{n}x_{i}+\sum_{j}^{m}y_{j}) = 0
+(\sum_{i}^{n}x_{i}+2\sum_{j}^{m}y_{j}) = 0
 $$
 
 $$
 \lambda =
 \frac{n+m}
-{\sum_{i}^{n}x_{i}+\sum_{j}^{m}y_{j}}
+{\sum_{i}^{n}x_{i}+2\sum_{j}^{m}y_{j}}
 $$
 
-Thus, $\lambda_{MLE} = \frac{n+m}{\sum_{i}^{n}x_{i}+\sum_{j}^{m}y_{j}}$.
+Thus, $\lambda_{MLE} = \frac{n+m}{\sum_{i}^{n}x_{i}+2\sum_{j}^{m}y_{j}}$.
 
 ### Empirical Solution
 
@@ -252,9 +243,7 @@ e <- exp(1)
 pois <- function(lambda,x,y){
   n <- length(x)
   m <- length(y)
-  p.x <- (lambda^n)*prod((e^(-lambda*x)))
-  p.y <- (lambda^m)*prod((e^(-lambda*y)))
-  p.x*p.y
+  (n+m)*log(lambda) - lambda*(sum(x) + 2*sum(y))
 }
 
 # Create sequence of lambdas for MLE plot
@@ -267,74 +256,84 @@ y <- sample(1:10,40,replace=T)
 # Apply pois function to find likelihoods
 L_pois <- pois(lambdas,x,y)
 # Calculate analytical solution
-obs <- (length(x)+length(y))/(sum(x) + sum(y))
+obs <- (length(x)+length(y))/(sum(x) + 2*sum(y))
 # Plot
 df <- data.frame(x = lambdas,
                  y = L_pois)
 ggplot(df, aes(x=x,y=y)) +
   geom_line() +
-  geom_vline(xintercept = obs, col = "red")
+  geom_vline(xintercept = obs, col = "red") +
+  xlim(0,1)
 ```
 
+It does appear that the analytical solution (the red line) is at the maximum of the log likelihood function.
 
 ## 6.13
 
 ### a
 
 $$
-L(\alpha|X;\beta) =
-\alpha \beta x^{\beta - 1} e^{-\alpha x^{\beta}}
+L(\alpha|X_1,...,X_n;\beta) =
+\prod_i^n\alpha \beta X_{i}^{\beta - 1} e^{-\alpha X_{i}^{\beta}} =
+(\alpha \beta)^n \prod_i^n X_{i}^{\beta - 1} e^{-\alpha X_{i}^{\beta}}
+$$
+
+$$
+ln(L(\alpha)) =
+nln\alpha +
+nln\beta +
+(\beta - 1)\sum_i^n ln X_{i} +
+\sum_i^n ln(e^{-\alpha X_{i}^{\beta}})
 $$
 
 $$
 ln(L(\alpha|X;\beta)) =
-ln\alpha + ln\beta +(\beta - 1)lnx + ln(e^{-\alpha x^{\beta}})
-$$
-
-$$
-ln(L(\alpha|X;\beta)) =
-ln\alpha + ln\beta +(\beta - 1)lnx -\alpha x^{\beta}
+nln\alpha +
+nln\beta +
+(\beta - 1)\sum_i^n ln X_{i} -
+\sum_i^n\alpha X_{i}^{\beta}
 $$
 
 $$
 \frac{\partial{ln(L(\alpha|X;\beta))}}{\partial \alpha}=
-\frac{1}{\alpha} - x^{\beta} = 0
+\frac{n}{\alpha} - \sum_i^nX_{i}^{\beta} = 0
 $$
 
-$$
-\alpha = \frac{1}{x^{\beta}}
-$$
-
-Thus $\alpha_{MLE} = \frac{1}{x^{\beta}}$.
+Thus $\alpha_{MLE} = \frac{1}{n}\sum_i^nX_{i}^{\beta}$.
 
 ### b
 
 $$
-L(\alpha;\beta|X) =
-\alpha \beta x^{\beta - 1} e^{-\alpha x^{\beta}}
+L(\alpha;\beta|X_1,...,X_n) =
+(\alpha \beta)^n \prod_i^n X_{i}^{\beta - 1} e^{-\alpha X_{i}^{\beta}}
 $$
 
 Take the natural log of both sides:
 
 $$
 ln(L(\alpha;\beta|X)) =
-ln \alpha + ln \beta + (\beta - 1)ln x -\alpha x^{\beta}
+nln\alpha +
+nln\beta +
+(\beta - 1)\sum_i^n ln X_{i} -
+\alpha\sum_i^n X_{i}^{\beta}
 $$
 
 Differentiate with respect to $\alpha$ and $\beta$ and set to 0. Solve simultaneously for a and b:
 
 $$
-\frac{\partial ln(L(\alpha|X))}
+\frac{\partial ln(L(\alpha;\beta|X))}
 {\partial \alpha}=
-1/\alpha - x^{\beta} = 0
+\frac{n}{\alpha} - \sum_i^nX_{i}^{\beta} =
+0
 $$
 
 and
 
 $$
-\frac{\partial ln(L(\beta|X))}
-{\partial \beta}=
-1/\beta - +ln x - ax^{\beta} = 0
+\frac{\partial ln(L(alpha;\beta|X))}
+{\partial \beta} =
+\frac{n}{\beta} + ln(\sum_i^n X_{i}) - \alpha\sum_i^n X_{i}^{\beta} = 
+0
 $$
 
 
