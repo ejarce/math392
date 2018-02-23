@@ -147,16 +147,16 @@ Derive with respect to $\theta$ and set to 0:
 
 $$
 \frac{\partial(lnL(\theta|x_{1},...,x_{n}))}{\partial\theta} =
--\frac{n}{\theta^3}3\theta^{2} + \frac{1}{3\theta^3}\sum_i^n{x_i^{2}} = 0
+-\frac{n}{\theta^3}3\theta^{2} + \frac{1}{\theta^3}\sum_i^n{x_i^{2}} = 0
 $$
 
 $$
-\frac{3n}{\theta} = \frac{\sum_i^n x_{i}^2}{3\theta^3}
+\frac{3n}{\theta} = \frac{\sum_i^n x_{i}^2}{\theta^3}
 $$
 
 $$
 \theta = \sqrt{
-\frac{\sum_i^n x_{i}^2}{9n}
+\frac{\sum_i^n x_{i}^2}{3n}
 }
 $$
 
@@ -165,7 +165,7 @@ Thus $\theta_{MLE}  = \frac{\bar{x}\sqrt{n}}{\sqrt{3}}$.
 ### Empirical Solution
 
 ```{r}
-# Build function
+# Build log function
 f <- function(theta, x){
   n <- length(x)
   n*(log(sqrt(2/pi)) - log(theta^3)) +
@@ -174,28 +174,30 @@ f <- function(theta, x){
 }
 
 # Create sequence of thetas for MLE plot
-thetas <- seq(from = .1, to = 30, by = .1)
+thetas <- seq(from = .1, to = 60, by = .1)
 # Reset seed and draw random sample of x's
 set.seed(23)
-x <- sample(1:10,30,replace=T)
+x <- rnorm(30,5,2)
 # Apply function to find likelihoods
 L_theta <- f(thetas,x)
 # Find x-intercept from analytical solution
 n <- length(x)
-analytical.sol <- sqrt(sum(x^2)/9*n)
+analytical.sol <- sqrt(sum(x^2)/(3*n))
 # Plot
 df <- data.frame(x = thetas,
                  y = L_theta)
 ggplot(df, aes(x=x,y=y)) +
   geom_line() +
-  geom_vline(xintercept = analytical.sol, col = "red")
+  geom_vline(xintercept = analytical.sol, col = "red") +
+  xlim(0,60) +
+  ylim(-500,0)
 ```
+
+As expected, the maximum likelihood estimate of our simulation is at about the analytical solution.
 
 ## 6.11
 
 ### Analytical Solution
-
-As before,
 
 $$
 L(\lambda) = \prod_i^n f(x_{i}) \prod_j^m f(y_{j})
@@ -238,8 +240,7 @@ Thus, $\lambda_{MLE} = \frac{n+m}{\sum_{i}^{n}x_{i}+2\sum_{j}^{m}y_{j}}$.
 ### Empirical Solution
 
 ```{r}
-# Build function
-e <- exp(1)
+# Build log function
 pois <- function(lambda,x,y){
   n <- length(x)
   m <- length(y)
@@ -263,10 +264,11 @@ df <- data.frame(x = lambdas,
 ggplot(df, aes(x=x,y=y)) +
   geom_line() +
   geom_vline(xintercept = obs, col = "red") +
-  xlim(0,1)
+  xlim(0,1) +
+  ylim(-500,0)
 ```
 
-It does appear that the analytical solution (the red line) is at the maximum of the log likelihood function.
+The analytical solution (the red line) is at around the maximum of the log likelihood function.
 
 ## 6.13
 
@@ -291,7 +293,7 @@ ln(L(\alpha|X;\beta)) =
 nln\alpha +
 nln\beta +
 (\beta - 1)\sum_i^n ln X_{i} -
-\sum_i^n\alpha X_{i}^{\beta}
+\alpha \sum_i^n X_{i}^{\beta}
 $$
 
 $$
@@ -335,6 +337,33 @@ $$
 \frac{n}{\beta} + ln(\sum_i^n X_{i}) - \alpha\sum_i^n X_{i}^{\beta} = 
 0
 $$
+
+### Empirical Solution
+
+```{r}
+# Build log function
+f <- function(alpha,beta,x){
+  n <- length(x)
+  n*log(alpha) +
+    n*log(beta) +
+    (beta-1)*sum(log(x)) -
+    alpha*sum(x^beta)
+}
+
+# Create sequence of alphas and betas for plot
+alphas <- seq(0,100,by=.1)
+betas <- seq(0,100,by=.1)
+# Draw random sample of x's
+set.seed(11)
+x <-rnorm(30,9,3)
+# Apply function
+L_ab <- f(alphas,betas,x)
+df <- data.frame(alphas = alphas,
+                 betas = betas,
+                 L = L_ab)
+ggplot(df, aes(alphas,betas)) +
+  geom_tile(aes(fill = L))
+```
 
 
 ## 6.14
@@ -410,6 +439,9 @@ Given the dataset, $\alpha$ = .27 makes more sense, since $X_{max}$ = 10. Now pl
 
 $$
 .27 + \beta = 11.6
+$$
+
+$$
 \beta = 11.33
 $$
 
@@ -472,7 +504,7 @@ Thus $\theta_{MOM} \approx$ 1.463.
 
 ## 6.25
 
-$\forall i \epsilon$ {1,..,n}, $a_{i} = \frac{1}{n}$
+$\forall i \epsilon$ {1,..,n}, $\sum_i^n a_{i} = n$
 
 ## 6.27
 
@@ -538,6 +570,7 @@ $$
 $$
 MSE[\hat{\sigma}^2] = \frac{2n-\sigma^4}{n^2}
 $$
+
 ## 6.30
 
 ### a
