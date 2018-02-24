@@ -1,7 +1,7 @@
 ---
 title: "MATH 392 Problem Set 4"
 author: "EJ Arce"
-date: "17 February 2018"
+date: "23 February 2018"
 output: 
   pdf_document:
     fig_height: 3
@@ -332,38 +332,11 @@ $$
 and
 
 $$
-\frac{\partial ln(L(alpha;\beta|X))}
+\frac{\partial ln(L(\alpha;\beta|X))}
 {\partial \beta} =
 \frac{n}{\beta} + ln(\sum_i^n X_{i}) - \alpha\sum_i^n X_{i}^{\beta} = 
 0
 $$
-
-### Empirical Solution
-
-```{r}
-# Build log function
-f <- function(alpha,beta,x){
-  n <- length(x)
-  n*log(alpha) +
-    n*log(beta) +
-    (beta-1)*sum(log(x)) -
-    alpha*sum(x^beta)
-}
-
-# Create sequence of alphas and betas for plot
-alphas <- seq(0,100,by=.1)
-betas <- seq(0,100,by=.1)
-# Draw random sample of x's
-set.seed(11)
-x <-rnorm(30,9,3)
-# Apply function
-L_ab <- f(alphas,betas,x)
-df <- data.frame(alphas = alphas,
-                 betas = betas,
-                 L = L_ab)
-ggplot(df, aes(alphas,betas)) +
-  geom_tile(aes(fill = L))
-```
 
 
 ## 6.14
