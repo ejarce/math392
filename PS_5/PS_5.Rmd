@@ -1,0 +1,48 @@
+---
+title: "MATH 392 Problem Set 5"
+author: "EJ Arce"
+date: "2 March 2018"
+output: 
+  pdf_document:
+    fig_height: 3
+    fig_width: 6
+---
+
+```{r, include=FALSE}
+require(tidyverse) # load packages
+require(resampledata)
+set.seed(30) # set seed for reproducibility
+```
+
+## 6.39
+
+{$\hat{\beta}_n$} is consistent if and only if $lim_{n\to\infty} P(|\hat{\beta}_n - \beta| < \varepsilon) = 1$ $\forall$ $\varepsilon$ > 0.
+
+It has been shown before that $\forall$ n $\epsilon$ N, $E[\hat{\beta}_n] = \frac{n}{n+1}\beta$. Thus,
+
+$$
+\begin{aligned}
+lim_{n\to\infty} P(|\hat{\beta}_n - \beta| < \varepsilon) = 1
+& \Leftrightarrow lim_{n\to\infty} P(|E[\hat{\beta}_n] - \beta| < \varepsilon) = 1 \\ 
+& \Leftrightarrow lim_{n\to\infty}|E[\hat{\beta}_n] - \beta| < \varepsilon \\
+& \Leftrightarrow lim_{n\to\infty}|\frac{n}{n+1}\beta - \beta| < \varepsilon \\
+& \Leftrightarrow lim_{n\to\infty}|(\frac{n}{n+1} - 1)\beta| < \varepsilon \\
+\end{aligned}
+$$
+It suffices to show that $lim_{n\to\infty}$|$\frac{n}{n+1} - 1$| < $\varepsilon$:
+
+Let $\varepsilon$ > 0. Then $\exists$ m $\epsilon$ $\mathbb{N}$ st $\forall n \geq m$, 
+
+$$
+\frac{1}{n} < \varepsilon \Rightarrow
+\frac{1}{n+1} < \varepsilon \Rightarrow
+|\frac{-1}{n+1}| < \varepsilon \Rightarrow
+|\frac{n-n-1}{n+1}| < \varepsilon \Rightarrow
+|\frac{n}{n+1} - \frac{n+1}{n+1}| < \varepsilon \Rightarrow
+|\frac{n}{n+1} - 1| < \varepsilon
+$$
+
+Thus $lim_{n\to\infty}$|$\frac{n}{n+1} - 1$| < $\varepsilon$, so $lim_{n\to\infty} P(|\hat{\beta}_n - \beta| < \varepsilon) = 1$. Thus {$\hat{\beta}_n$} is consistent.
+
+## 6.40
+
