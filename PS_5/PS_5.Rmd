@@ -31,7 +31,7 @@ lim_{n\to\infty} P(|\hat{\beta}_n - \beta| < \varepsilon) = 1
 $$
 It suffices to show that $lim_{n\to\infty}$|$\frac{n}{n+1} - 1$| < $\varepsilon$:
 
-Let $\varepsilon$ > 0. Then $\exists$ m $\epsilon$ $\mathbb{N}$ st $\forall n \geq m$, 
+Let $\varepsilon$ > 0. Then $\exists m \epsilon\mathbb{N}$ st $\forall n \geq m$, 
 
 $$
 \frac{1}{n} < \varepsilon \Rightarrow
@@ -46,3 +46,24 @@ Thus $lim_{n\to\infty}$|$\frac{n}{n+1} - 1$| < $\varepsilon$, so $lim_{n\to\inft
 
 ## 6.40
 
+{$\hat{\sigma}_n^2$} is consistent if and only if $lim_{n\to\infty} P(|\hat{\sigma}_n^2 - \sigma^2| < \varepsilon) = 1$ $\forall$ $\varepsilon$ > 0.
+
+Again, it suffices to show that $lim_{n\to\infty} P(|E[\hat{\sigma}_n^2] - \sigma^2| < \varepsilon) = 1$. From Problem Set 4, 
+
+$$
+E[\hat{\sigma}_n^2] - \sigma^2 =
+\frac{n-1}{n}\sigma^2 - \sigma^2 = 
+\frac{-1}{n}\sigma^2
+$$
+
+Let $\varepsilon$ > 0. Then $\exists m \epsilon\mathbb{N}$ st $\forall n \geq m$, , $\frac{1}{n} < \varepsilon$. Thus, $\forall n \geq m$,
+
+$$
+\left|\frac{1}{n}\right| < \varepsilon \Rightarrow
+\left|\frac{1}{n}\sigma^2\right| < \varepsilon \Rightarrow
+\left|(\frac{n-1}{n}-\frac{n}{n})\sigma^2\right| < \varepsilon \Rightarrow
+\left|\frac{n-1}{n}\sigma^2 - \sigma^2\right| < \varepsilon \Rightarrow
+\left|E[\hat{\sigma}_n^2] - \sigma^2\right| < \varepsilon.
+$$
+
+Thus, $lim_{n\to\infty} P(|\hat{\sigma}_n^2 - \sigma^2| < \varepsilon) = 1\forall\varepsilon > 0$.
