@@ -477,7 +477,7 @@ Thus $\theta_{MOM} \approx$ 1.463.
 
 ## 6.25
 
-$\forall i \epsilon$ {1,..,n}, $\sum_i^n a_{i} = n$
+$\forall i \epsilon$ {1,..,n}, $\sum_i^n a_{i} = 1$
 
 ## 6.27
 
