@@ -67,3 +67,165 @@ $$
 $$
 
 Thus, $lim_{n\to\infty} P(|\hat{\sigma}_n^2 - \sigma^2| < \varepsilon) = 1\forall\varepsilon > 0$.
+
+## 7.3
+
+### a
+
+$$
+X \sim N(185, 50^2) , n = 100, \bar{X} = 210 
+$$
+
+$$
+P(q_{.05} < \frac{\bar{X}-\mu}{\sigma/\sqrt{n}} < q_{.95}) = 1-\alpha = .9
+$$
+
+Solve for $\mu$:
+
+$$
+P( \, \bar{X} - q_{.95}\frac{\sigma}{\sqrt{n}} < 
+\mu < 
+\bar{X} - q_{.05}\frac{\sigma}{\sqrt{n}}) \, =
+.9
+$$
+
+$$
+(210 - 1.645\frac{50}{\sqrt{100}} < 
+\mu < 
+210 + .1.645\frac{50}{\sqrt{100}}) =
+(205.2 < \mu < 209.8)
+$$
+
+Thus the 90% confidence interval is (201.8, 218.8)
+
+### b
+
+Solve for n:
+
+$$
+\bar{X} -LB_{.05} =
+\bar{X} -(\bar{X}-1.96(\frac{50}{\sqrt{n}}))
+\leq 10
+$$
+
+$$
+1.96\frac{50}{10} \leq \sqrt{n}
+$$
+
+$$
+n \geq 96.04
+$$
+
+A sample size of at least 97 is needed.
+
+### c
+
+Like b,
+
+$$
+2.576\frac{50}{10} \leq \sqrt{n}
+$$
+
+$$
+n \geq 15.9
+$$
+
+A sample size of at least 166 is needed
+
+## 7.8
+
+For n = 30, the code generating the simulation is below, along with the proportion of times the confidence interval missed $\mu$. Compared to the next three numbers for n=60, n=100, and n=250, the frequency of missing $\mu$ converges to the thoretical frequency of .05.
+
+```{r}
+# Run simulation
+low <- 0
+high <- 0
+n <- 30
+q <- qt(.975, n-1)
+N <- 10^5
+for(i in 1:N){
+  x <- rgamma(n,shape = 5, rate = 2)
+  xbar <- mean(x)
+  s <- sd(x)
+  L <- xbar - q*s/sqrt(n)
+  U <- xbar + q*s/sqrt(n)
+  if(U<5/2){
+    low <- low + 1
+  }
+  if(5/2<L){
+    high <- high + 1
+  }
+}
+
+(high+low)/N
+```
+
+```{r, echo=F}
+n <- 60
+low <- 0
+high <- 0
+q <- qt(.975, n-1)
+N <- 10^5
+for(i in 1:N){
+  x <- rgamma(n,shape = 5, rate = 2)
+  xbar <- mean(x)
+  s <- sd(x)
+  L <- xbar - q*s/sqrt(n)
+  U <- xbar + q*s/sqrt(n)
+  if(U<5/2){
+    low <- low + 1
+  }
+  if(5/2<L){
+    high <- high + 1
+  }
+}
+(high+low)/N
+```
+
+```{r, echo=F}
+n <- 100
+low <- 0
+high <- 0
+q <- qt(.975, n-1)
+N <- 10^5
+for(i in 1:N){
+  x <- rgamma(n,shape = 5, rate = 2)
+  xbar <- mean(x)
+  s <- sd(x)
+  L <- xbar - q*s/sqrt(n)
+  U <- xbar + q*s/sqrt(n)
+  if(U<5/2){
+    low <- low + 1
+  }
+  if(5/2<L){
+    high <- high + 1
+  }
+}
+(high+low)/N
+```
+
+```{r, echo=F}
+n <- 250
+low <- 0
+high <- 0
+q <- qt(.975, n-1)
+N <- 10^5
+for(i in 1:N){
+  x <- rgamma(n,shape = 5, rate = 2)
+  xbar <- mean(x)
+  s <- sd(x)
+  L <- xbar - q*s/sqrt(n)
+  U <- xbar + q*s/sqrt(n)
+  if(U<5/2){
+    low <- low + 1
+  }
+  if(5/2<L){
+    high <- high + 1
+  }
+}
+
+(high+low)/N
+```
+
+
+## 7.34
