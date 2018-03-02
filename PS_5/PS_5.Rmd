@@ -48,7 +48,7 @@ Thus $lim_{n\to\infty}$|$\frac{n}{n+1} - 1$| < $\varepsilon$, so $lim_{n\to\inft
 
 {$\hat{\sigma}_n^2$} is consistent if and only if $lim_{n\to\infty} P(|\hat{\sigma}_n^2 - \sigma^2| < \varepsilon) = 1$ $\forall$ $\varepsilon$ > 0.
 
-Again, it suffices to show that $lim_{n\to\infty} P(|E[\hat{\sigma}_n^2] - \sigma^2| < \varepsilon) = 1$. From Problem Set 4, 
+From Problem Set 4, 
 
 $$
 E[\hat{\sigma}_n^2] - \sigma^2 =
@@ -56,13 +56,15 @@ E[\hat{\sigma}_n^2] - \sigma^2 =
 \frac{-1}{n}\sigma^2
 $$
 
+It suffices to show that $lim_{n\to\infty} |\frac{n-1}{n} - 1| < \varepsilon$ $\forall \varepsilon > 0$. 
+
 Let $\varepsilon$ > 0. Then $\exists m \epsilon\mathbb{N}$ st $\forall n \geq m$, , $\frac{1}{n} < \varepsilon$. Thus, $\forall n \geq m$,
 
 $$
 \left|\frac{1}{n}\right| < \varepsilon \Rightarrow
-\left|\frac{1}{n}\sigma^2\right| < \varepsilon \Rightarrow
-\left|(\frac{n-1}{n}-\frac{n}{n})\sigma^2\right| < \varepsilon \Rightarrow
-\left|\frac{n-1}{n}\sigma^2 - \sigma^2\right| < \varepsilon \Rightarrow
+\left|\frac{1}{n}\right| < \varepsilon \Rightarrow
+\left|(\frac{n-1}{n}-\frac{n}{n})\right| < \varepsilon \Rightarrow
+\left|\frac{n-1}{n}-1\right| < \varepsilon \Rightarrow
 \left|E[\hat{\sigma}_n^2] - \sigma^2\right| < \varepsilon.
 $$
 
@@ -93,10 +95,10 @@ $$
 (210 - 1.645\frac{50}{\sqrt{100}} < 
 \mu < 
 210 + .1.645\frac{50}{\sqrt{100}}) =
-(205.2 < \mu < 209.8)
+(201.8 < \mu < 218.8)
 $$
 
-Thus the 90% confidence interval is (201.8, 218.8)
+Thus the 90% confidence interval is (201.8, 218.8).
 
 ### b
 
@@ -127,10 +129,10 @@ $$
 $$
 
 $$
-n \geq 15.9
+n \geq 165.9
 $$
 
-A sample size of at least 166 is needed
+A sample size of at least 166 is needed.
 
 ## 7.8
 
@@ -229,3 +231,29 @@ for(i in 1:N){
 
 
 ## 7.34
+
+We are given
+
+$$
+X \sim Gamma(2,\lambda),
+f_{X}(x) = \frac{xe^{-x/\lambda}}{\Gamma(2)\lambda^2}
+$$
+
+$$
+2\lambda x \sim \chi^2_{df=4},
+f_{2\lambda X}(2\lambda x) =
+\frac{(2\lambda x)^{4/2 - 1} e^{(-2\lambda x)^{2}/2}}{2^{4/2}\Gamma(4/2)}
+$$
+
+Thus, the quantiles will be calculated in terms of $2\lambda x$, using the $\chi^2_{df=4}$  distribution.
+
+$$
+\begin{aligned}
+.95 = P(q_{1,x} < \lambda < q_{2,x})
+& =  P(q_{1,2\lambda x} < 2 \lambda X < q_{2,2\lambda x}) \\ 
+& = P(\frac{q_{1,2\lambda x}}{2X} < \lambda < \frac{q_{2,2\lambda x}}{2X}) \\
+& = P(\frac{.2422}{X} < \lambda < \frac{5.572}{X}) \\
+\end{aligned}
+$$
+
+Thus the 95% confidence interval for $\lambda$ is $(\frac{.2422}{X},\frac{5.572}{X})$.
