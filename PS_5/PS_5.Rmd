@@ -1,7 +1,7 @@
 ---
-title: "MATH 392 Problem Set 5"
+title: "MATH 392 Problem Set 5 (Corrected)"
 author: "EJ Arce"
-date: "2 March 2018"
+date: "9 March 2018"
 output: 
   pdf_document:
     fig_height: 3
@@ -16,33 +16,30 @@ set.seed(30) # set seed for reproducibility
 
 ## 6.39
 
-{$\hat{\beta}_n$} is consistent if and only if $lim_{n\to\infty} P(|\hat{\beta}_n - \beta| < \varepsilon) = 1$ $\forall$ $\varepsilon$ > 0.
+{$\hat{\beta}_n$} is consistent if and only if $\lim_{n\rightarrow\infty} P(|\hat{\beta}_n - \beta| < \varepsilon) = 1$ $\forall$ $\varepsilon$ > 0.
 
-It has been shown before that $\forall$ n $\epsilon$ N, $E[\hat{\beta}_n] = \frac{n}{n+1}\beta$. Thus,
+We know that for any n, the distribution of $X_{max}$ follows the distribution
+
+$$
+F_{X_{max}}(x) = \begin{cases}
+0 if x > \beta \\
+(\frac{x}{\beta})^n if 0<x<\beta \\
+0 if x < 0 \\
+\end{cases}
+$$
+
+Thus
 
 $$
 \begin{aligned}
-lim_{n\to\infty} P(|\hat{\beta}_n - \beta| < \varepsilon) = 1
-& \Leftrightarrow lim_{n\to\infty} P(|E[\hat{\beta}_n] - \beta| < \varepsilon) = 1 \\ 
-& \Leftrightarrow lim_{n\to\infty}|E[\hat{\beta}_n] - \beta| < \varepsilon \\
-& \Leftrightarrow lim_{n\to\infty}|\frac{n}{n+1}\beta - \beta| < \varepsilon \\
-& \Leftrightarrow lim_{n\to\infty}|(\frac{n}{n+1} - 1)\beta| < \varepsilon \\
+\lim_{n\rightarrow\infty} P(|\hat{\beta}_n - \beta| < \varepsilon)
+& = \lim_{n\rightarrow\infty} P(\beta - \varepsilon < \hat{\beta}_n < \beta + \varepsilon) \\ 
+& = \lim_{n\rightarrow\infty} P(\beta - \varepsilon < X_{max} < \beta)  \\
+& = \lim_{n\rightarrow\infty} (\frac{x}{\beta})^n |_{\beta-\varepsilon}^{\beta}\\
+& = 1 - \lim_{n\rightarrow\infty} (\frac{\beta-\varepsilon}{\beta})^n \\
+& = 1
 \end{aligned}
 $$
-It suffices to show that $lim_{n\to\infty}$|$\frac{n}{n+1} - 1$| < $\varepsilon$:
-
-Let $\varepsilon$ > 0. Then $\exists m \epsilon\mathbb{N}$ st $\forall n \geq m$, 
-
-$$
-\frac{1}{n} < \varepsilon \Rightarrow
-\frac{1}{n+1} < \varepsilon \Rightarrow
-|\frac{-1}{n+1}| < \varepsilon \Rightarrow
-|\frac{n-n-1}{n+1}| < \varepsilon \Rightarrow
-|\frac{n}{n+1} - \frac{n+1}{n+1}| < \varepsilon \Rightarrow
-|\frac{n}{n+1} - 1| < \varepsilon
-$$
-
-Thus $lim_{n\to\infty}$|$\frac{n}{n+1} - 1$| < $\varepsilon$, so $lim_{n\to\infty} P(|\hat{\beta}_n - \beta| < \varepsilon) = 1$. Thus {$\hat{\beta}_n$} is consistent.
 
 ## 6.40
 
