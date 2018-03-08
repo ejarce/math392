@@ -22,9 +22,9 @@ We know that for any n, the distribution of $X_{max}$ follows the distribution
 
 $$
 F_{X_{max}}(x) = \begin{cases}
-0 if x > \beta \\
-(\frac{x}{\beta})^n if 0<x<\beta \\
-0 if x < 0 \\
+1,x > \beta \\
+(\frac{x}{\beta})^n, 0<x<\beta \\
+0, x < 0 \\
 \end{cases}
 $$
 
@@ -37,13 +37,26 @@ $$
 & = \lim_{n\rightarrow\infty} P(\beta - \varepsilon < X_{max} < \beta)  \\
 & = \lim_{n\rightarrow\infty} (\frac{x}{\beta})^n |_{\beta-\varepsilon}^{\beta}\\
 & = 1 - \lim_{n\rightarrow\infty} (\frac{\beta-\varepsilon}{\beta})^n \\
-& = 1
+& = 1 \forall \varepsilon >0
 \end{aligned}
 $$
 
+Thus {$\hat{\beta}_n$} is consistent.
+
 ## 6.40
 
-{$\hat{\sigma}_n^2$} is consistent if and only if $lim_{n\to\infty} P(|\hat{\sigma}_n^2 - \sigma^2| < \varepsilon) = 1$ $\forall$ $\varepsilon$ > 0.
+{$\hat{\sigma}_n^2$} is consistent iff
+
+$$
+\lim_{n\rightarrow\infty} P(|\hat{\sigma}_n^2 - \sigma^2| < \varepsilon)
+= 1 \Leftrightarrow 
+\begin{cases}
+\lim_{n\rightarrow\infty} bias[\hat{\sigma}_n^2] = 0 \\
+\lim_{n\rightarrow\infty} V[\hat{\sigma}_n^2] = 0
+\end{cases}
+$$
+
+First show that $\lim_{n\rightarrow\infty} bias[\hat{\sigma}_n^2] = 0$:
 
 From Problem Set 4, 
 
@@ -53,19 +66,24 @@ E[\hat{\sigma}_n^2] - \sigma^2 =
 \frac{-1}{n}\sigma^2
 $$
 
-It suffices to show that $lim_{n\to\infty} |\frac{n-1}{n} - 1| < \varepsilon$ $\forall \varepsilon > 0$. 
+Thus $\lim_{n\rightarrow\infty} E[\hat{\sigma}_n^2] - \sigma^2 = 0 \Rightarrow bias[\hat{\sigma}_n^2] \rightarrow 0$.
 
-Let $\varepsilon$ > 0. Then $\exists m \epsilon\mathbb{N}$ st $\forall n \geq m$, , $\frac{1}{n} < \varepsilon$. Thus, $\forall n \geq m$,
+Now show that $\lim_{n\rightarrow\infty} V[\hat{\sigma}_n^2] = 0$:
+
+From B.16, $\frac{\hat{\sigma}_n^2n}{\sigma^2} \sim \chi^2_{n}$, so $V[\frac{\hat{\sigma}_n^2n}{\sigma^2}] = 2n$ $\forall$ $n \epsilon \mathbb{N}$. Thus
+
 
 $$
-\left|\frac{1}{n}\right| < \varepsilon \Rightarrow
-\left|\frac{1}{n}\right| < \varepsilon \Rightarrow
-\left|(\frac{n-1}{n}-\frac{n}{n})\right| < \varepsilon \Rightarrow
-\left|\frac{n-1}{n}-1\right| < \varepsilon \Rightarrow
-\left|E[\hat{\sigma}_n^2] - \sigma^2\right| < \varepsilon.
+\begin{aligned}
+\lim_{n\rightarrow\infty} (\frac{n}{\sigma^2})^2 V[\hat{\sigma}_n^2]
+& = \lim_{n\rightarrow\infty} V[\frac{\hat{\sigma}_n^2n}{\sigma^2}] = \lim_{n\rightarrow\infty} 2n \\
+\lim_{n\rightarrow\infty} V[\hat{\sigma}_n^2]& = \lim_{n\rightarrow\infty}\frac{2n}{(\frac{n}{\sigma^2})^2} \\ 
+& = \lim_{n\rightarrow\infty} \frac{2\sigma^4}{n} \\
+& = 0
+\end{aligned}
 $$
 
-Thus, $lim_{n\to\infty} P(|\hat{\sigma}_n^2 - \sigma^2| < \varepsilon) = 1\forall\varepsilon > 0$.
+Thus {$\hat{\sigma}_n^2$} is consistent.
 
 ## 7.3
 
@@ -133,7 +151,7 @@ A sample size of at least 166 is needed.
 
 ## 7.8
 
-For n = 30, the code generating the simulation is below, along with the proportion of times the confidence interval missed $\mu$. Compared to the next three numbers for n=60, n=100, and n=250, the frequency of missing $\mu$ converges to the thoretical frequency of .05.
+For n = 30, the code generating the simulation is below, along with the proportion of times the confidence interval missed $\mu$.
 
 ```{r}
 # Run simulation
@@ -226,20 +244,19 @@ for(i in 1:N){
 (high+low)/N
 ```
 
+Compared to the next three numbers for n=60, n=100, and n=250, the frequency of missing $\mu$ converges to the thoretical frequency of .05. As n increases, the number of estimates that are too high increases, while the number of estimates that are too low decreases.
 
 ## 7.34
 
 We are given
 
 $$
-X \sim Gamma(2,\lambda),
-f_{X}(x) = \frac{xe^{-x/\lambda}}{\Gamma(2)\lambda^2}
+X \sim Gamma(2,\lambda)
 $$
 
 $$
 2\lambda x \sim \chi^2_{df=4},
-f_{2\lambda X}(2\lambda x) =
-\frac{(2\lambda x)^{4/2 - 1} e^{(-2\lambda x)^{2}/2}}{2^{4/2}\Gamma(4/2)}
+f_{2\lambda X}(2\lambda x)
 $$
 
 Thus, the quantiles will be calculated in terms of $2\lambda x$, using the $\chi^2_{df=4}$  distribution.
