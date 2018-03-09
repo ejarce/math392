@@ -1,0 +1,104 @@
+---
+title: "MATH 392 Power Calculations"
+author: "EJ Arce"
+date: "9 March 2018"
+output: 
+  pdf_document:
+    fig_height: 3
+    fig_width: 6
+---
+
+```{r, include=FALSE}
+require(tidyverse) # load packages
+require(resampledata)
+set.seed(30) # set seed for reproducibility
+```
+
+Given $\mu = 100, \sigma^2 = 15^2, \bar{X} = 105, \alpha = .05$, for what sizes n will power be .7? .75? .9?
+
+$$
+H_{0}: \mu = 100
+$$
+
+$$
+H_{A}: \mu > 100
+$$
+
+## Power = .7
+
+Under each hypothesis, the sampling distributions will follow
+
+$$
+X_{H_0} \sim N(\mu,\sigma/\sqrt{n})
+$$
+
+$$
+X_{H_A} \sim N(\bar{X}_{obs},\sigma/\sqrt{n})
+$$
+
+With $\alpha=.05$, the critical value $x_{crit}$at which we reject the null hypothesis is $\mu$ +1.645($\sigma/\sqrt{n}$). $\beta$ is the area under the alternative hypothesis distribution to the left of this critical value. With $\beta$ = .3, we can refer to the standard normal distribution to find how many standard errors away from the mean our critical value is:
+
+```{r}
+qnorm(.3,0,1)
+```
+
+Thus,
+
+$$
+x_{crit} = 100 + 1.645\frac{\sigma}{\sqrt{n}} = 105 - .5244\frac{\sigma}{\sqrt{n}}
+$$
+
+Now solve for n:
+
+$$
+\begin{aligned}
+(1.645+.5244) \frac{\sigma}{\sqrt{n}} & = 5 \\
+(\frac{(2.189)15}{5})^2 & = n \\
+n & = 42.35
+\end{aligned}
+$$
+
+Thus for a power of at least .7, the sample size must be at least 43.
+
+## Power = .75
+
+Generalizing the equations for $x_{crit}$,
+
+$$
+100 + 1.645\frac{\sigma}{\sqrt{n}} = 105 - q_{z_{\beta}}\frac{\sigma}{\sqrt{n}}
+$$
+
+where $q_{z_{\beta}}$ is the quantile for the standard normal distribution under which the area to the left of the quantile is $\beta$. Thus for $\beta$ = .25, $q_{z_{\beta}}$ is
+
+```{r}
+qnorm(.25,0,1)
+```
+
+Thus
+
+$$
+\begin{aligned}
+(1.645+.6745) \frac{\sigma}{\sqrt{n}} & = 5 \\
+(\frac{(2.319)15}{5})^2 & = n \\
+48.4 & = n
+\end{aligned}
+$$
+
+A sample size of at least 49 is needed for a power of .75
+
+## Power = .9
+
+```{r}
+qnorm(.1,0,1)
+```
+
+$$
+\begin{aligned}
+(1.645+1.282) \frac{\sigma}{\sqrt{n}} & = 5 \\
+(\frac{(2.927)15}{5})^2 & = n \\
+77.11 & = n
+\end{aligned}
+$$
+
+A sample size of at least 78 is needed for a power of .9.
+
