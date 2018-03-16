@@ -90,6 +90,8 @@ ggplot(null.samp.mom, aes(x=theta.mom)) +
 (sum(null.samp.mom$theta.mom > theta.test.mom) + 1)/(length(null.samp.mom$theta.mom) + 1)
 ```
 
+Again, we cannot reject the null hypothesis.
+
 ## 1.3
 
 The two types of error committed when concluding hypothesis tests are
