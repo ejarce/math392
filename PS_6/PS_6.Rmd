@@ -120,7 +120,6 @@ theta5 <- 365
 f.mle <- function(theta.a){
   nsim <- 10^5
   theta.0 <- 345
-  test <- (n+1)*(max(x))/n
   thetas.0 <- rep(NA,nsim)
   thetas.a <- rep(NA,nsim)
   for(i in 1:nsim){
@@ -135,14 +134,42 @@ f.mle <- function(theta.a){
   power <- sum(sampling.a$thetas.a > alpha.crit)/length(sampling.a$thetas.a)
   power
 }
-f.mle(theta5)
 ```
 
 ```{r}
-d <- data.frame(x = c(theta1,theta2,theta3,theta4,theta5),
+d.mle <- data.frame(x = c(theta1,theta2,theta3,theta4,theta5),
                 y = c(f.mle(theta1),f.mle(theta2),
                       f.mle(theta3),f.mle(theta4),f.mle(theta5)))
-ggplot(d,aes(x=x,y=y)) + geom_point()
+ggplot(d.mle,aes(x=x,y=y)) + geom_point()
 ```
 
-As expected, as the true alternative hypothesis increases, the power increases.
+Now do the same thing for the method of moments estimator:
+
+```{r}
+f.mom <- function(theta.a){
+  nsim <- 10^5
+  theta.0 <- 345
+  thetas.0 <- rep(NA,nsim)
+  thetas.a <- rep(NA,nsim)
+  for(i in 1:nsim){
+    sample.0 <- runif(n,0,theta.0)
+    sample.a <- runif(n,0,theta.a)
+    thetas.0[i] <- 2*mean(sample.0)
+    thetas.a[i] <- 2*mean(sample.a)
+  }
+  sampling.0 <- data.frame(thetas.0)
+  sampling.a <- data.frame(thetas.a)
+  alpha.crit <- quantile(sampling.0$thetas.0,.95)
+  power <- sum(sampling.a$thetas.a > alpha.crit)/length(sampling.a$thetas.a)
+  power
+}
+```
+
+```{r}
+d.mom <- data.frame(x = c(theta1,theta2,theta3,theta4,theta5),
+                y = c(f.mom(theta1),f.mom(theta2),
+                      f.mom(theta3),f.mom(theta4),f.mom(theta5)))
+ggplot(d.mom,aes(x=x,y=y)) + geom_point()
+```
+
+As expected for both tests, as the true alternative hypothesis increases, the power increases. For true alternative hypotheses with $\theta$ > 345 (which is what we would get when we do reject $H_{0}$), the power is greater using the MLE statistic. Thus, the MLE test would be a better option.
