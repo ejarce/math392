@@ -21,10 +21,13 @@ set.seed(30) # set seed for reproducibility
 We know that for any n, the distribution of $X_{max}$ follows the distribution
 
 $$
-F_{X_{max}}(x) = \begin{cases}
-1,x > \beta \\
-(\frac{x}{\beta})^n, 0<x<\beta \\
-0, x < 0 \\
+F_{X_{max}}(x) =
+\begin{cases}
+\begin{aligned}
+1, & \space x > \beta \\
+(\frac{x}{\beta})^n, & \space 0<x<\beta \\
+0, & \space x < 0 \\
+\end{aligned}
 \end{cases}
 $$
 
