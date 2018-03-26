@@ -1,0 +1,144 @@
+---
+title: "MATH 392 Problem Set 7"
+author: "EJ Arce"
+date: "26 March 2018"
+output: 
+  pdf_document:
+    fig_height: 3
+    fig_width: 6
+---
+
+
+```{r, include=FALSE}
+require(tidyverse) # load packages
+require(resampledata)
+set.seed(30) # set seed for reproducibility
+```
+
+## 4
+
+$$
+Var(X) = 5
+$$
+
+$$
+Var(Y) = 7
+$$
+
+$$
+Cov(X,Y) = 2
+$$
+
+$$
+\begin{aligned}
+Var(2X-5Y) & = Var(2X) + Var(5Y) - 2(2)(5)Cov(X,Y) \\
+& = 4Var(X) + 25Var(Y) - 20Cov(X,Y) \\
+& = 20 + 175 - 40 \\
+& = 155
+\end{aligned}
+$$
+
+## 7
+
+```{r}
+corrExerciseB <- corrExerciseB
+```
+
+### a
+
+```{r}
+cov <- cov(corrExerciseB$X, corrExerciseB$Y)
+sigx <- sd(corrExerciseB$X)
+sigy <- sd(corrExerciseB$Y)
+rho <- cov/(sigx*sigy)
+rho
+```
+
+### b
+
+```{r}
+d <- aggregate(corrExerciseB[, 1:2], list(corrExerciseB$Z), mean)
+d
+```
+
+### c
+
+```{r}
+ggplot(d, aes(x = X, y = Y)) +
+  geom_point(aes(color = Group.1))
+```
+
+```{r}
+cor(d$X,d$Y)
+```
+
+The correlation coefficient is much higher between means of X and Y than the correlation coefficient between each observation.
+
+## 9
+
+Show that $\sum_{i=1}^{n} y_{i} - \hat{y}_{i} = 0$.
+
+$\sum_{i=1}^{n} y_{i} - \hat{y}_{i} = \sum_{i=1}^{n} y_{i} - (a + bx_{i})$, where a and b are found using the function $g(a,b) = \sum_{i=1}^{n} (y_{i} -(a+bx_{i}))^2$, setting $\frac{\partial g}{\partial a}$ = 0 and solving for a and b. Thus,
+
+$$
+g(a,b) = \sum_{i=1}^{n} y_{i}^2 -2y_{i}(a+bx_{i}) +a^2 +2abx_{i} + (bx_{i})^2
+$$
+
+$$
+\begin{aligned}
+\frac{\partial g}{\partial a} = 0 & = \sum_{i=1}^{n} -2y_{i} + 2a + 2bx_{i}\\
+0 & = 2 \sum_{i=1}^{n} a + bx_{i} -y_{i} \\
+0 & = 2na + 2 \sum_{i=1}^{n}bx_{i}-y_{i} \\
+a & = \frac{1}{n}\sum_{i=1}^{n}y_{i}-bx_{i}
+\end{aligned}
+$$
+
+Now plug a into the original equation:
+
+$$
+\begin{aligned}
+\sum_{i=1}^{n} y_{i} - (a + bx_{i})
+& = -na + \sum_{i=1}^{n} y_{i} - bx_{i} \\
+& = -n\frac{1}{n}\sum_{i=1}^{n}y_{i}- bx_{i} + \sum_{i=1}^{n}y_{i}- bx_{i} \\
+\sum_{i=1}^{n} y_{i} - \hat{y}_{i}& = 0
+\end{aligned}
+$$
+
+## 14
+
+```{r}
+df <- Illiteracy
+```
+
+### a
+
+```{r}
+ggplot(df,aes(x=Illit, y = Births)) + geom_point()
+```
+
+At first glance, the scatterplot appears to show a positive relationship between female birth rate and illiteracy.
+
+### b
+
+```{r}
+m1 <- lm(Births ~ Illit, data = df)
+m1$coefficients
+summary(m1)$r.squared
+```
+
+The least-squares equation is $\hat{y} = 1.9488 + .0545x$. A 1% increase in the illteracy of women is associated with an increase of .0545 in the number of births per woman. With an $r^2$ of .5908, about 59% of the variance in the number of births per woman can be explaned by the variance in illteracy rate.
+
+### c
+
+```{r}
+yhat <- predict(m1)
+resid.d <- data.frame(residuals = m1$residuals,
+                      y = yhat)
+ggplot(resid.d, aes(x = yhat, y = residuals)) + geom_point() + geom_hline(yintercept = 0)
+```
+
+The residuals are randomly scattered when plotted against the predicted values of births. There is no clear linearity nor outliers, so this straight-line model is appropriate.
+
+### d
+
+Although the scatterplot, regression model, and residual plot all imply a positive relationship between births and illiteracy rate, we cannot conclude that the variance in one varaible causes the variance in another variable. For example, it is possible that a third variable causes the variance in both births and illiteracy.
